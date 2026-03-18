@@ -1,106 +1,176 @@
-# Clothing Store Frontend
+# 🛍️ ShopVN - Ecommerce Frontend
 
-Dự án frontend cho cửa hàng thời trang sử dụng React.js + Ant Design
+Ứng dụng ecommerce hiện đại được xây dựng bằng **React 19**, **TypeScript**, **Vite**, và **Tailwind CSS**.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## ✨ Tính năng
 
-## Tính năng
+- 🏪 Hiển thị danh sách sản phẩm từ FakeStore API
+- 🔍 Lọc sản phẩm theo danh mục
+- 📄 Xem chi tiết sản phẩm
+- 🛒 Giỏ hàng với tính năng thêm/xóa/cập nhật số lượng
+- 💾 Lưu trữ giỏ hàng tự động (localStorage)
+- 📱 Responsive design - tối ưu cho mọi thiết bị
+- 🎨 UI đẹp mắt với Tailwind CSS
+- 🔔 Toast notifications cho user feedback
 
-### User (Khách hàng)
-- ✅ Trang chủ với banner và sản phẩm nổi bật
-- ✅ Danh sách sản phẩm với tìm kiếm, lọc, sắp xếp
-- ✅ Chi tiết sản phẩm
-- ✅ Giỏ hàng
-- ✅ Thanh toán
-- ✅ Đăng ký / Đăng nhập
+## 🚀 Công nghệ sử dụng
 
-### Admin (Quản trị viên)
-- ✅ Dashboard thống kê
-- ✅ Quản lý sản phẩm (Thêm, Sửa, Xóa)
-- ✅ Quản lý danh mục (Thêm, Sửa, Xóa)
-- ✅ Giao diện admin riêng biệt
+- **Vite 8.0** - Build tool siêu nhanh
+- **React 19.2.4** - Framework UI hiện đại
+- **TypeScript 5.9** - Type safety
+- **Tailwind CSS 3.4.1** - Utility-first CSS
+- **React Router 7.13.1** - Client-side routing
+- **Zustand 5.0.12** - State management đơn giản với persist
+- **React Query 5.90.21** - Data fetching & caching
+- **Axios 1.13.6** - HTTP client
+- **Lucide React 0.577.0** - Beautiful icons
+- **React Hot Toast 2.6.0** - Notifications
 
-## Công nghệ sử dụng
+## 📦 Cài đặt
 
-- **React.js** - Framework JavaScript
-- **Ant Design** - UI Component Library
-- **React Router** - Routing
-- **Axios** - HTTP Client
-- **Context API** - State Management
+```bash
+# Cài đặt dependencies
+npm install
 
-## Tài khoản Demo
+# Chạy development server
+npm run dev
+```
 
-### Admin Account
-- Email: `admin@admin.com`
-- Password: `admin123`
+Ứng dụng sẽ chạy tại: **http://localhost:5173**
 
-### User Account  
-- Email: Bất kỳ email hợp lệ
-- Password: Bất kỳ mật khẩu
+## 🛠️ Commands
 
-## Available Scripts
+```bash
+npm run dev      # Chạy development server
+npm run build    # Build cho production
+npm run preview  # Preview production build
+npm run lint     # Chạy ESLint
+```
 
-In the project directory, you can run:
+## 📁 Cấu trúc Project
 
-### `npm start`
+```
+src/
+├── components/
+│   ├── layout/          # Header, Footer
+│   ├── product/         # ProductCard, ProductList
+│   └── cart/            # CartItem
+├── pages/               # Route pages
+│   ├── HomePage.tsx
+│   ├── ProductsPage.tsx
+│   ├── ProductDetailPage.tsx
+│   └── CartPage.tsx
+├── store/               # Zustand stores
+│   └── cartStore.ts
+├── services/            # API services
+│   └── api.ts
+├── types/               # TypeScript types
+│   └── index.ts
+├── utils/               # Helper functions
+│   └── helpers.ts
+└── hooks/               # Custom hooks
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🎯 Features Chi tiết
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Quản lý Sản phẩm
+- Hiển thị danh sách sản phẩm với hình ảnh, giá, đánh giá
+- Lọc theo danh mục (electronics, jewelery, men's clothing, women's clothing)
+- Xem chi tiết đầy đủ của từng sản phẩm
+- Loading states với skeleton screens
 
-### `npm test`
+### Giỏ hàng
+- Thêm sản phẩm vào giỏ hàng
+- Cập nhật số lượng (tăng/giảm)
+- Xóa sản phẩm khỏi giỏ
+- Tự động tính tổng tiền
+- Lưu trữ trong localStorage (không mất khi reload)
+- Badge hiển thị số lượng items
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### UI/UX
+- Responsive design
+- Loading states
+- Toast notifications
+- Smooth transitions
+- Mobile-friendly
+- Hover effects
 
-### `npm run build`
+## 🔗 API
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Project sử dụng [FakeStore API](https://fakestoreapi.com/)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Endpoints:**
+- `GET /products` - Lấy tất cả sản phẩm
+- `GET /products/:id` - Lấy sản phẩm theo ID
+- `GET /products/categories` - Lấy danh sách categories
+- `GET /products/category/:category` - Lấy sản phẩm theo category
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🎨 Customization
 
-### `npm run eject`
+### Thay đổi màu chủ đạo
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Edit `tailwind.config.js`:
+```js
+theme: {
+  extend: {
+    colors: {
+      primary: {
+        // Customize colors here
+      }
+    }
+  }
+}
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Thay đổi API
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Edit `src/services/api.ts`:
+```typescript
+const API_BASE_URL = 'your-api-url';
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📝 Development Notes
 
-## Learn More
+- **TypeScript**: Sử dụng `import type` cho type-only imports (do `verbatimModuleSyntax` enabled)
+- **Cart state**: Tự động lưu vào localStorage với key: `cart-storage`
+- **React Query**: Config `refetchOnWindowFocus: false`
+- **Toaster**: Đã được setup trong `main.tsx`
+- **Price format**: USD (có thể convert sang VND bằng `formatPrice()`)
+- **Tailwind**: Sử dụng version 3.4.1 (stable, không phải v4)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**TypeScript Example:**
+```typescript
+// Correct ✅
+import type { Product } from './types';
+import { useCartStore } from './store/cartStore';
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// Incorrect ❌ - Will cause TS1484 error
+import { Product } from './types';
+```
 
-### Code Splitting
+## 🐛 Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Nếu gặp lỗi Tailwind CSS:**
+```bash
+npm install -D tailwindcss@3.4.1 postcss autoprefixer
+npm install
+```
 
-### Analyzing the Bundle Size
+**Clear cache:**
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 📄 License
 
-### Making a Progressive Web App
+MIT License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 👨‍💻 Author
 
-### Advanced Configuration
+Built with ❤️ by ShopVN Team
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+**Happy Coding! 🚀**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
