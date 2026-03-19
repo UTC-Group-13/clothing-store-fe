@@ -18,3 +18,18 @@ export const truncateText = (text: string, maxLength: number): string => {
   return text.substring(0, maxLength) + '...';
 };
 
+export const FASHION_CATEGORIES = ["men's clothing", "women's clothing"] as const;
+
+export const isFashionCategory = (category: string): boolean => {
+  return FASHION_CATEGORIES.includes(category as (typeof FASHION_CATEGORIES)[number]);
+};
+
+export const getFashionCategoryLabel = (category: string): string => {
+  const labels: Record<string, string> = {
+    "men's clothing": 'Nam',
+    "women's clothing": 'Nữ',
+  };
+
+  return labels[category] || 'Thời trang';
+};
+
