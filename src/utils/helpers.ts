@@ -1,9 +1,11 @@
+import type { Product } from '../types';
+
 export const formatPrice = (price: number): string => {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
     minimumFractionDigits: 0,
-  }).format(price * 23000); // Convert USD to VND (approximate rate)
+  }).format(price);
 };
 
 export const formatPriceUSD = (price: number): string => {
@@ -11,6 +13,10 @@ export const formatPriceUSD = (price: number): string => {
     style: 'currency',
     currency: 'USD',
   }).format(price);
+};
+
+export const getProductPrice = (product: Product): number => {
+  return product.basePrice || product.price || 0;
 };
 
 export const truncateText = (text: string, maxLength: number): string => {

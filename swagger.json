@@ -1,0 +1,2854 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Clothing Store API",
+    "description": "API documentation for Clothing Store application",
+    "contact": {
+      "name": "UTC Developer",
+      "email": "dev@utc.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Sample Data",
+      "description": "API tạo dữ liệu mẫu cho testing"
+    },
+    {
+      "name": "Variant Stock",
+      "description": "API quản lý tồn kho theo biến thể + size"
+    },
+    {
+      "name": "Size",
+      "description": "API quản lý size sản phẩm"
+    },
+    {
+      "name": "Authentication",
+      "description": "API đăng ký và đăng nhập"
+    },
+    {
+      "name": "Category",
+      "description": "API quản lý danh mục sản phẩm"
+    },
+    {
+      "name": "Product Variant",
+      "description": "API quản lý biến thể sản phẩm (theo màu)"
+    },
+    {
+      "name": "Color",
+      "description": "API quản lý màu sắc"
+    },
+    {
+      "name": "Product",
+      "description": "API quản lý sản phẩm"
+    },
+    {
+      "name": "File Upload",
+      "description": "API upload và quản lý file ảnh"
+    }
+  ],
+  "paths": {
+    "/api/variant-stocks/{id}": {
+      "get": {
+        "tags": [
+          "Variant Stock"
+        ],
+        "summary": "Lấy tồn kho theo ID",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID tồn kho",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVariantStockDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Variant Stock"
+        ],
+        "summary": "Cập nhật tồn kho",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID tồn kho",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VariantStockDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVariantStockDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Variant Stock"
+        ],
+        "summary": "Xóa tồn kho",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID tồn kho",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/sizes/{id}": {
+      "get": {
+        "tags": [
+          "Size"
+        ],
+        "summary": "Lấy size theo ID",
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID size",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSizeDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Size"
+        ],
+        "summary": "Cập nhật size",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID size",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SizeDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSizeDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Size"
+        ],
+        "summary": "Xóa size",
+        "description": "Không xóa được nếu đang có tồn kho sử dụng.",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID size",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Lấy sản phẩm theo ID",
+        "operationId": "getById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID sản phẩm",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Cập nhật sản phẩm",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID sản phẩm",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Xóa sản phẩm",
+        "description": "Không xóa được nếu sản phẩm đang có biến thể.",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID sản phẩm",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/product-variants/{id}": {
+      "get": {
+        "tags": [
+          "Product Variant"
+        ],
+        "summary": "Lấy biến thể theo ID",
+        "operationId": "getById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID biến thể",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductVariantDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Product Variant"
+        ],
+        "summary": "Cập nhật biến thể",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID biến thể",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductVariantDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductVariantDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Product Variant"
+        ],
+        "summary": "Xóa biến thể",
+        "description": "Không xóa được nếu đang có tồn kho.",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID biến thể",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/colors/{id}": {
+      "get": {
+        "tags": [
+          "Color"
+        ],
+        "summary": "Lấy màu sắc theo ID",
+        "operationId": "getById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID màu",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseColorDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Color"
+        ],
+        "summary": "Cập nhật màu sắc",
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID màu",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColorDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseColorDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Color"
+        ],
+        "summary": "Xóa màu sắc",
+        "description": "Không xóa được nếu đang có biến thể sử dụng.",
+        "operationId": "delete_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID màu",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/categories/{id}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Lấy danh mục theo ID",
+        "operationId": "getById_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID danh mục",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCategoryDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Cập nhật danh mục",
+        "operationId": "update_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID danh mục",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCategoryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Xóa danh mục",
+        "description": "Không xóa được nếu có danh mục con hoặc sản phẩm.",
+        "operationId": "delete_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID danh mục",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/variant-stocks": {
+      "get": {
+        "tags": [
+          "Variant Stock"
+        ],
+        "summary": "Lấy tất cả tồn kho",
+        "operationId": "getAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListVariantStockDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Variant Stock"
+        ],
+        "summary": "Tạo tồn kho",
+        "description": "Thêm tồn kho cho 1 ô (variant × size). SKU phải duy nhất.",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VariantStockDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVariantStockDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/sizes": {
+      "get": {
+        "tags": [
+          "Size"
+        ],
+        "summary": "Lấy tất cả sizes",
+        "operationId": "getAll_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListSizeDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Size"
+        ],
+        "summary": "Tạo size",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SizeDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSizeDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/sample-data/generate": {
+      "post": {
+        "tags": [
+          "Sample Data"
+        ],
+        "summary": "Tạo dữ liệu mẫu",
+        "description": "Tạo 50 sản phẩm quần áo mẫu gồm đầy đủ: categories, colors, sizes, products, product_variants, variant_stocks. ⚠️ SẼ XÓA SẠCH dữ liệu product cũ trước khi tạo mới!",
+        "operationId": "generateSampleData",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Lấy tất cả sản phẩm",
+        "operationId": "getAll_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListProductDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Tạo sản phẩm",
+        "description": "Tạo mới sản phẩm. categoryId phải tồn tại, slug phải duy nhất.",
+        "operationId": "create_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/product-variants": {
+      "get": {
+        "tags": [
+          "Product Variant"
+        ],
+        "summary": "Lấy tất cả biến thể",
+        "operationId": "getAll_3",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListProductVariantDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Product Variant"
+        ],
+        "summary": "Tạo biến thể",
+        "description": "Gắn một màu sắc vào sản phẩm. Mỗi cặp (product, color) là duy nhất.",
+        "operationId": "create_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductVariantDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductVariantDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/files/images": {
+      "post": {
+        "tags": [
+          "File Upload"
+        ],
+        "summary": "Upload nhiều ảnh",
+        "description": "Upload nhiều file ảnh cùng lúc (tối đa 10 file). Trả về danh sách URL tương ứng.",
+        "operationId": "uploadImages",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "description": "Danh sách file ảnh (tối đa 10 file)",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "files"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListFileUploadResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/files/image": {
+      "post": {
+        "tags": [
+          "File Upload"
+        ],
+        "summary": "Upload một ảnh",
+        "description": "Upload một file ảnh (jpeg, png, gif, webp, svg). Trả về URL để sử dụng cho trường `productImage` hoặc bất kỳ trường ảnh nào.",
+        "operationId": "uploadImage",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "File ảnh cần upload"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upload thành công",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "File không hợp lệ",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseFileUploadResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Chưa xác thực",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseFileUploadResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/colors": {
+      "get": {
+        "tags": [
+          "Color"
+        ],
+        "summary": "Lấy tất cả màu sắc",
+        "operationId": "getAll_4",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListColorDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Color"
+        ],
+        "summary": "Tạo màu sắc",
+        "operationId": "create_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColorDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseColorDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Lấy tất cả danh mục",
+        "operationId": "getAll_5",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCategoryDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Tạo danh mục",
+        "description": "Tạo mới danh mục. parentId = null nếu là danh mục gốc.",
+        "operationId": "create_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCategoryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Đăng ký tài khoản",
+        "description": "Tạo tài khoản mới với username, email và password",
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseAuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Đăng nhập",
+        "description": "Đăng nhập bằng username và password, trả về JWT token",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseAuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/change-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Đăng nhập",
+        "description": "Thay đổi mật khẩu",
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/variant-stocks/variant/{variantId}": {
+      "get": {
+        "tags": [
+          "Variant Stock"
+        ],
+        "summary": "Lấy tồn kho theo biến thể",
+        "operationId": "getByVariantId",
+        "parameters": [
+          {
+            "name": "variantId",
+            "in": "path",
+            "description": "ID biến thể",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListVariantStockDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/variant-stocks/search": {
+      "get": {
+        "tags": [
+          "Variant Stock"
+        ],
+        "summary": "Tìm kiếm tồn kho",
+        "description": "Tìm kiếm theo SKU và/hoặc biến thể với phân trang",
+        "operationId": "search",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "Từ khóa (SKU)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variantId",
+            "in": "query",
+            "description": "ID biến thể",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang (từ 0)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Số lượng mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Trường sắp xếp",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "id"
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "description": "Hướng sắp xếp",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagedResponseVariantStockDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sizes/type/{type}": {
+      "get": {
+        "tags": [
+          "Size"
+        ],
+        "summary": "Lấy sizes theo loại",
+        "description": "Lấy sizes theo type: clothing, numeric, shoes",
+        "operationId": "getByType",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Loại size: clothing | numeric | shoes",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListSizeDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/slug/{slug}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Lấy sản phẩm theo slug",
+        "operationId": "getBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Slug sản phẩm",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/search": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Tìm kiếm sản phẩm",
+        "description": "Tìm theo tên sản phẩm, nhiều danh mục, nhiều màu sắc, khoảng giá và trạng thái. Hỗ trợ phân trang và sắp xếp.",
+        "operationId": "search_1",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Tên sản phẩm",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryIds",
+            "in": "query",
+            "description": "Danh sách ID danh mục (chọn nhiều)",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "minPrice",
+            "in": "query",
+            "description": "Giá tối thiểu",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "description": "Giá tối đa",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "colorIds",
+            "in": "query",
+            "description": "Danh sách ID màu sắc (chọn nhiều)",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "description": "Trạng thái hoạt động",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang (từ 0)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Số lượng mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Trường sắp xếp",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "id"
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "description": "Hướng sắp xếp",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagedResponseProductDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/paged": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Lấy sản phẩm có phân trang",
+        "operationId": "getAllPaged",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang (từ 0)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Số lượng mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Trường sắp xếp",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "id"
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "description": "Hướng sắp xếp",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagedResponseProductDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/category/{categoryId}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Lấy sản phẩm theo danh mục",
+        "operationId": "getByCategoryId",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "ID danh mục",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListProductDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product-variants/product/{productId}": {
+      "get": {
+        "tags": [
+          "Product Variant"
+        ],
+        "summary": "Lấy biến thể theo sản phẩm",
+        "operationId": "getByProductId",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID sản phẩm",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListProductVariantDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories/{id}/children": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Lấy danh mục con",
+        "operationId": "getChildren",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID danh mục cha",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCategoryDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories/slug/{slug}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Lấy danh mục theo slug",
+        "operationId": "getBySlug_1",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Slug danh mục",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCategoryDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories/roots": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Lấy danh mục gốc",
+        "description": "Lấy danh mục cấp cao nhất (không có parent)",
+        "operationId": "getRootCategories",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCategoryDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/files/image/{fileName}": {
+      "delete": {
+        "tags": [
+          "File Upload"
+        ],
+        "summary": "Xóa ảnh",
+        "description": "Xóa một file ảnh khỏi server theo tên file.",
+        "operationId": "deleteImage",
+        "parameters": [
+          {
+            "name": "fileName",
+            "in": "path",
+            "description": "Tên file cần xóa (ví dụ: a1b2c3d4-uuid.jpg)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VariantStockDTO": {
+        "type": "object",
+        "description": "Thông tin tồn kho theo biến thể + size",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID (tự động tạo)",
+            "readOnly": true
+          },
+          "variantId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID product variant",
+            "example": 1
+          },
+          "sizeId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID size",
+            "example": 2
+          },
+          "stockQty": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Số lượng tồn kho",
+            "example": 50,
+            "minimum": 0
+          },
+          "priceOverride": {
+            "type": "number",
+            "description": "Giá riêng cho size/màu này (null = dùng base_price)",
+            "example": 299000
+          },
+          "sku": {
+            "type": "string",
+            "description": "Mã hàng duy nhất",
+            "example": "ATB-DO-M",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "sizeLabel": {
+            "type": "string",
+            "description": "Label size",
+            "readOnly": true
+          },
+          "sizeType": {
+            "type": "string",
+            "description": "Loại size",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "sizeId",
+          "sku",
+          "variantId"
+        ]
+      },
+      "ApiResponseVariantStockDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/VariantStockDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SizeDTO": {
+        "type": "object",
+        "description": "Thông tin size sản phẩm",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID size (tự động tạo)",
+            "readOnly": true
+          },
+          "label": {
+            "type": "string",
+            "description": "Nhãn size",
+            "example": "M",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "type": {
+            "type": "string",
+            "description": "Loại size: clothing | numeric | shoes",
+            "example": "clothing",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Thứ tự sắp xếp",
+            "example": 2,
+            "minimum": 0
+          }
+        },
+        "required": [
+          "label",
+          "sortOrder",
+          "type"
+        ]
+      },
+      "ApiResponseSizeDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SizeDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductDTO": {
+        "type": "object",
+        "description": "Thông tin sản phẩm",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID sản phẩm (tự động tạo)",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Tên sản phẩm",
+            "example": "Áo Thun Basic Cotton",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug sản phẩm (URL-friendly)",
+            "example": "ao-thun-basic-cotton",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "description": "Mô tả sản phẩm",
+            "example": "Áo thun cotton 100%, thoáng mát"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID danh mục sản phẩm",
+            "example": 2
+          },
+          "basePrice": {
+            "type": "number",
+            "description": "Giá gốc sản phẩm",
+            "example": 199000
+          },
+          "brand": {
+            "type": "string",
+            "description": "Thương hiệu",
+            "example": "Uniqlo",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "material": {
+            "type": "string",
+            "description": "Chất liệu",
+            "example": "Cotton 100%",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Trạng thái hoạt động",
+            "example": true
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Ngày tạo",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Ngày cập nhật",
+            "readOnly": true
+          },
+          "categoryName": {
+            "type": "string",
+            "description": "Tên danh mục",
+            "readOnly": true
+          },
+          "thumbnailUrl": {
+            "type": "string",
+            "description": "Ảnh đại diện sản phẩm (lấy từ biến thể mặc định)",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "basePrice",
+          "categoryId",
+          "name",
+          "slug"
+        ]
+      },
+      "ApiResponseProductDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProductDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductVariantDTO": {
+        "type": "object",
+        "description": "Thông tin biến thể sản phẩm (theo màu)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID variant (tự động tạo)",
+            "readOnly": true
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID sản phẩm",
+            "example": 1
+          },
+          "colorId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID màu sắc",
+            "example": 3
+          },
+          "colorImageUrl": {
+            "type": "string",
+            "description": "URL ảnh thumbnail cho màu này",
+            "example": "/uploads/images/ao-thun-do.jpg"
+          },
+          "images": {
+            "type": "string",
+            "description": "Danh sách URL ảnh chi tiết cho màu này"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Có phải màu mặc định không",
+            "example": false
+          },
+          "colorName": {
+            "type": "string",
+            "description": "Tên màu sắc",
+            "readOnly": true
+          },
+          "colorHexCode": {
+            "type": "string",
+            "description": "Mã hex màu sắc",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "colorId",
+          "productId"
+        ]
+      },
+      "ApiResponseProductVariantDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProductVariantDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ColorDTO": {
+        "type": "object",
+        "description": "Thông tin màu sắc",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID màu (tự động tạo)",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Tên màu sắc",
+            "example": "Đỏ",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "hexCode": {
+            "type": "string",
+            "description": "Mã hex màu sắc",
+            "example": "#FF0000",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug màu sắc (URL-friendly)",
+            "example": "do",
+            "maxLength": 50,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "hexCode",
+          "name",
+          "slug"
+        ]
+      },
+      "ApiResponseColorDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ColorDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CategoryDTO": {
+        "type": "object",
+        "description": "Thông tin danh mục sản phẩm",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID danh mục (tự động tạo)",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Tên danh mục",
+            "example": "Áo",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug danh mục (URL-friendly)",
+            "example": "ao",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID danh mục cha (null nếu là danh mục gốc)",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "description": "Mô tả danh mục",
+            "example": "Danh mục áo các loại"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Ngày tạo",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "name",
+          "slug"
+        ]
+      },
+      "ApiResponseCategoryDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CategoryDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseString": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListFileUploadResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileUploadResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FileUploadResponse": {
+        "type": "object",
+        "description": "Kết quả upload file ảnh",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "description": "Tên file đã lưu",
+            "example": "a1b2c3d4-uuid.jpg"
+          },
+          "fileUrl": {
+            "type": "string",
+            "description": "URL truy cập công khai của ảnh",
+            "example": "/uploads/images/a1b2c3d4-uuid.jpg"
+          },
+          "contentType": {
+            "type": "string",
+            "description": "Loại nội dung (content type)",
+            "example": "image/jpeg"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Kích thước file (bytes)",
+            "example": 204800
+          }
+        }
+      },
+      "ApiResponseFileUploadResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FileUploadResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "description": "Thông tin đăng ký tài khoản",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Tên đăng nhập",
+            "example": "john_doe",
+            "maxLength": 50,
+            "minLength": 3
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Địa chỉ email",
+            "example": "john@example.com"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Số điện thoại",
+            "example": "0901234567"
+          },
+          "password": {
+            "type": "string",
+            "description": "Mật khẩu",
+            "example": "password123",
+            "maxLength": 2147483647,
+            "minLength": 6
+          }
+        },
+        "required": [
+          "password",
+          "username"
+        ]
+      },
+      "ApiResponseAuthResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AuthResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "description": "Kết quả xác thực",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "JWT access token"
+          },
+          "tokenType": {
+            "type": "string",
+            "description": "Loại token",
+            "example": "Bearer"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID người dùng"
+          },
+          "username": {
+            "type": "string",
+            "description": "Tên đăng nhập"
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Email"
+          },
+          "role": {
+            "type": "string",
+            "description": "Vai trò",
+            "example": "USER"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "description": "Thông tin đăng nhập",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Tên đăng nhập",
+            "example": "john_doe"
+          },
+          "password": {
+            "type": "string",
+            "description": "Mật khẩu",
+            "example": "password123"
+          }
+        },
+        "required": [
+          "password",
+          "username"
+        ]
+      },
+      "PasswordRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string"
+          },
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          },
+          "verifyPassword": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "emailAddress": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseListVariantStockDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariantStockDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponsePagedResponseVariantStockDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PagedResponseVariantStockDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PagedResponseVariantStockDTO": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariantStockDTO"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "first": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseListSizeDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SizeDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListProductDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponsePagedResponseProductDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PagedResponseProductDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PagedResponseProductDTO": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDTO"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "first": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseListProductVariantDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductVariantDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListColorDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColorDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListCategoryDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseVoid": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "Nhập JWT token vào đây. Lấy token từ API /api/auth/login",
+        "name": "bearerAuth",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import heroImage from '../assets/hero.png';
-import { getFashionCategoryLabel } from '../utils/helpers';
 
 const BRAND_NAMES = ['VERSACE', 'ZARA', 'GUCCI', 'PRADA', 'Calvin Klein'];
 
@@ -46,6 +45,11 @@ const HomePage = () => {
     queryFn: productService.getCategories,
   });
 
+  // Filter to only show parent categories (parentId is null)
+  const parentCategories = useMemo(() => {
+    return categories?.filter(cat => cat.parentId === null) || [];
+  }, [categories]);
+
   const { data: categoryProducts, isLoading: categoryLoading } = useQuery({
     queryKey: ['products', selectedCategory],
     queryFn: () => productService.getProductsByCategory(selectedCategory),
@@ -56,7 +60,11 @@ const HomePage = () => {
   const isLoading = selectedCategory === 'all' ? productsLoading : categoryLoading;
   const newArrivals = useMemo(() => (products || []).slice(0, 4), [products]);
   const topSelling = useMemo(
-    () => [...(products || [])].sort((a, b) => b.rating.rate - a.rating.rate).slice(0, 4),
+    () => [...(products || [])].sort((a, b) => {
+      const rateA = a.rating?.rate || 0;
+      const rateB = b.rating?.rate || 0;
+      return rateB - rateA;
+    }).slice(0, 4),
     [products]
   );
   const styleProducts = useMemo(() => (products || []).slice(0, 4), [products]);
@@ -203,17 +211,17 @@ const HomePage = () => {
           >
             Tất cả bộ sưu tập
           </button>
-          {categories?.map((category) => (
+          {parentCategories?.map((category) => (
             <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
+              key={category.id}
+              onClick={() => setSelectedCategory(category.slug)}
               className={`px-6 py-2 rounded-full font-semibold transition capitalize ${
-                selectedCategory === category
+                selectedCategory === category.slug
                   ? 'bg-black text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
-              {getFashionCategoryLabel(category)}
+              {category.name}
             </button>
           ))}
         </div>
