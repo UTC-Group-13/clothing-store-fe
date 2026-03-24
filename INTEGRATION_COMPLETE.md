@@ -12,7 +12,7 @@ Successfully updated the ProductsPage to use real backend API endpoints for filt
 - `ApiResponse<T>` - generic API response wrapper
 
 ### 2. ✅ Updated API Services
-- Changed base URL to `http://localhost:8080/api`
+- Changed base URL to `http://160.30.113.40:8080/api`
 - Added `colorService.getAllColors()`
 - Added `sizeService.getAllSizes()`
 - Updated `productService.getCategories()` to return Category objects
@@ -54,7 +54,7 @@ Successfully updated the ProductsPage to use real backend API endpoints for filt
 ## Testing Checklist
 
 Before testing, ensure:
-- [ ] Backend server is running on `http://localhost:8080`
+- [ ] Backend server is running on `http://160.30.113.40:8080`
 - [ ] Database has color, category, size data populated
 - [ ] CORS is enabled for frontend
 

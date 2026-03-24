@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { AuthResponse, AuthData, LoginRequest, RegisterRequest } from '../types';
 
-const AUTH_API_BASE_URL = 'http://localhost:8080/api/auth';
+const AUTH_API_BASE_URL = 'http://160.30.113.40:8080/api/auth';
 
 const authApi = axios.create({
   baseURL: AUTH_API_BASE_URL,

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'http://160.30.113.40:8080';
 
 const getImageUrl = (url: string | null | undefined) => {
   if (!url) return 'https://via.placeholder.com/80x80?text=No+Image';
