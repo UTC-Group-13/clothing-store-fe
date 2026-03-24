@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ShoppingCart, Store, User, LogOut, Package } from 'lucide-react';
+import { ShoppingCart, Store, User, LogOut, Package, Shield } from 'lucide-react';
 import { cartService } from '../../services/api';
 import { useAuthStore } from '../../store/authStore';
 import { authService } from '../../services/authApi';
@@ -47,6 +47,12 @@ const Header = () => {
               <Link to="/orders" className="text-gray-700 hover:text-primary-600 transition flex items-center gap-1">
                 <Package className="w-4 h-4" />
                 Đơn hàng
+              </Link>
+            )}
+            {isAuthenticated && user?.role === 'ADMIN' && (
+              <Link to="/admin" className="text-orange-600 hover:text-orange-700 transition flex items-center gap-1 font-medium">
+                <Shield className="w-4 h-4" />
+                Admin
               </Link>
             )}
           </nav>

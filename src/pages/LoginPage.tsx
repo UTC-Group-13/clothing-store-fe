@@ -29,7 +29,13 @@ const LoginPage = () => {
         };
         setAuth(authUser);
         toast.success('Đăng nhập thành công!');
-        navigate('/');
+
+        // Redirect admin to admin dashboard, user to home
+        if (response.data.role === 'ADMIN') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       } else {
         toast.error(response.message || 'Đăng nhập thất bại');
       }

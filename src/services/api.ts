@@ -5,7 +5,8 @@ import type {
   CartSummary, CartItemRequest,
   ShippingMethod, PaymentType, ShopBankAccount,
   OrderDetail, OrderRequest, OrderStatus,
-  AddressDTO, AddressRequest
+  AddressDTO, AddressRequest,
+  AdminPagedResponse, UpdateOrderStatusRequest, ProductRequest
 } from '../types';
 
 const API_BASE_URL = 'http://localhost:8080/api';
@@ -233,6 +234,45 @@ export const orderStatusService = {
   getAll: async (): Promise<OrderStatus[]> => {
     const response = await api.get<ApiResponse<OrderStatus[]>>('/order-statuses');
     return response.data.data;
+  },
+};
+
+// ============= ADMIN API =============
+export const adminOrderService = {
+  getAllOrders: async (page = 0, size = 20): Promise<AdminPagedResponse<OrderDetail>> => {
+    const response = await api.get<ApiResponse<AdminPagedResponse<OrderDetail>>>(`/orders/admin/all?page=${page}&size=${size}`);
+    return response.data.data;
+  },
+
+  getOrdersByStatus: async (statusId: number, page = 0, size = 20): Promise<AdminPagedResponse<OrderDetail>> => {
+    const response = await api.get<ApiResponse<AdminPagedResponse<OrderDetail>>>(`/orders/admin/by-status/${statusId}?page=${page}&size=${size}`);
+    return response.data.data;
+  },
+
+  getOrderById: async (orderId: number): Promise<OrderDetail> => {
+    const response = await api.get<ApiResponse<OrderDetail>>(`/orders/admin/${orderId}`);
+    return response.data.data;
+  },
+
+  updateOrderStatus: async (orderId: number, data: UpdateOrderStatusRequest): Promise<OrderDetail> => {
+    const response = await api.patch<ApiResponse<OrderDetail>>(`/orders/admin/${orderId}/status`, data);
+    return response.data.data;
+  },
+};
+
+export const adminProductService = {
+  createProduct: async (data: ProductRequest): Promise<Product> => {
+    const response = await api.post<ApiResponse<Product>>('/products', data);
+    return response.data.data;
+  },
+
+  updateProduct: async (id: number, data: ProductRequest): Promise<Product> => {
+    const response = await api.put<ApiResponse<Product>>(`/products/${id}`, data);
+    return response.data.data;
+  },
+
+  deleteProduct: async (id: number): Promise<void> => {
+    await api.delete(`/products/${id}`);
   },
 };
 

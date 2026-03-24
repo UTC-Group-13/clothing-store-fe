@@ -302,3 +302,31 @@ export interface OrderStatus {
   id: number;
   status: string;
 }
+
+// ============= ADMIN TYPES =============
+
+export interface UpdateOrderStatusRequest {
+  statusId: number;
+}
+
+export interface AdminPagedResponse<T> {
+  content: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+  first: boolean;
+}
+
+export interface ProductRequest {
+  name: string;
+  slug: string;
+  description: string;
+  categoryId: number;
+  basePrice: number;
+  brand: string;
+  material: string;
+  isActive: boolean;
+  thumbnailUrl?: string;
+}
