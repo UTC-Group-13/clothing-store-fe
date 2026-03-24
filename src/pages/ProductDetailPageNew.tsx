@@ -1,15 +1,24 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Minus, Plus, ShoppingCart, Check } from 'lucide-react';
-import { productService, productVariantService, variantStockService, colorService, sizeService } from '../services/api';
-import { useCartStore } from '../store/cartStore';
+import { productService, productVariantService, variantStockService, colorService, sizeService, cartService } from '../services/api';
+import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const addToCart = useCartStore((state) => state.addToCart);
+  const queryClient = useQueryClient();
+  const { isAuthenticated } = useAuthStore();
+
+  // Server-side add to cart mutation
+  const addToCartMutation = useMutation({
+    mutationFn: cartService.addItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
 
   // State
   const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
@@ -102,8 +111,14 @@ const ProductDetailPage = () => {
     }
   }, [selectedVariant]);
 
-  // Handle add to cart
-  const handleAddToCart = () => {
+  // Handle add to cart (server-side)
+  const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      toast.error('Vui lòng đăng nhập để thêm vào giỏ hàng');
+      navigate('/login');
+      return;
+    }
+
     if (!product) {
       toast.error('Sản phẩm không tồn tại');
       return;
@@ -127,30 +142,23 @@ const ProductDetailPage = () => {
       }
     }
 
-    // Create cart item
-    const selectedColorInfo = colorsMap.get(selectedVariant!.colorId);
-    const selectedSizeInfo = selectedSizeId ? sizesMap.get(selectedSizeId) : null;
-    
-    const cartItem = {
-      ...product,
-      price: finalPrice,
-      basePrice: finalPrice,
-      quantity: quantity,
-      selectedVariantId,
-      selectedSizeId: selectedSizeId || undefined,
-      selectedColorName: selectedColorInfo?.name || selectedVariant?.colorName || 'N/A',
-      selectedColorHex: selectedColorInfo?.hexCode,
-      selectedSizeLabel: selectedSizeInfo?.label || selectedStock?.sizeLabel || undefined,
-      selectedSizeType: selectedSizeInfo?.type,
-      sku: selectedStock?.sku || `${product.slug}-${selectedVariantId}`,
-      image: productImages[0],
-      name: product.name,
-    };
+    if (!selectedStock) {
+      toast.error('Vui lòng chọn kích thước');
+      return;
+    }
 
-    addToCart(cartItem);
-    toast.success(`Đã thêm ${quantity} ${product.name} vào giỏ hàng!`, {
-      duration: 3000,
-    });
+    try {
+      await addToCartMutation.mutateAsync({
+        variantStockId: selectedStock.id,
+        qty: quantity,
+      });
+      toast.success(`Đã thêm ${quantity} ${product.name} vào giỏ hàng!`, {
+        duration: 3000,
+      });
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || 'Không thể thêm vào giỏ hàng';
+      toast.error(msg);
+    }
   };
 
   const formatPrice = (price: number) => {
@@ -471,11 +479,20 @@ const ProductDetailPage = () => {
             {/* Add to Cart Button */}
             <button
               onClick={handleAddToCart}
-              disabled={!selectedVariantId || (stocks.length > 0 && !selectedSizeId)}
+              disabled={!selectedVariantId || (stocks.length > 0 && !selectedSizeId) || addToCartMutation.isPending}
               className="w-full bg-gray-900 text-white py-4 rounded-xl font-semibold hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              <ShoppingCart className="w-5 h-5" />
-              Thêm vào giỏ hàng
+              {addToCartMutation.isPending ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  Đang thêm...
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="w-5 h-5" />
+                  Thêm vào giỏ hàng
+                </>
+              )}
             </button>
             
             {!selectedVariantId && (

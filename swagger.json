@@ -26,8 +26,24 @@
   ],
   "tags": [
     {
+      "name": "User Address",
+      "description": "API quản lý địa chỉ giao hàng của user"
+    },
+    {
       "name": "Sample Data",
       "description": "API tạo dữ liệu mẫu cho testing"
+    },
+    {
+      "name": "Shopping Cart",
+      "description": "API quan ly gio hang"
+    },
+    {
+      "name": "Payment Method",
+      "description": "API quan ly phuong thuc thanh toan cua nguoi dung"
+    },
+    {
+      "name": "Shipping Method",
+      "description": "API quan ly phuong thuc van chuyen"
     },
     {
       "name": "Variant Stock",
@@ -38,6 +54,22 @@
       "description": "API quản lý size sản phẩm"
     },
     {
+      "name": "Shop Bank Account",
+      "description": "API quản lý tài khoản ngân hàng của shop (ADMIN cấu hình, User xem để chuyển khoản)"
+    },
+    {
+      "name": "Order Status",
+      "description": "API quan ly trang thai don hang (PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED)"
+    },
+    {
+      "name": "Color",
+      "description": "API quản lý màu sắc"
+    },
+    {
+      "name": "Order",
+      "description": "API quan ly don hang"
+    },
+    {
       "name": "Authentication",
       "description": "API đăng ký và đăng nhập"
     },
@@ -46,12 +78,12 @@
       "description": "API quản lý danh mục sản phẩm"
     },
     {
-      "name": "Product Variant",
-      "description": "API quản lý biến thể sản phẩm (theo màu)"
+      "name": "Payment Type",
+      "description": "API danh muc loai thanh toan (COD, Visa, MoMo...)"
     },
     {
-      "name": "Color",
-      "description": "API quản lý màu sắc"
+      "name": "Product Variant",
+      "description": "API quản lý biến thể sản phẩm (theo màu)"
     },
     {
       "name": "Product",
@@ -294,13 +326,213 @@
         ]
       }
     },
+    "/api/shop-bank-accounts/{id}": {
+      "put": {
+        "tags": [
+          "Shop Bank Account"
+        ],
+        "summary": "[ADMIN] Cập nhật tài khoản ngân hàng",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID tài khoản",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShopBankAccountDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseShopBankAccountDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Shop Bank Account"
+        ],
+        "summary": "[ADMIN] Xóa tài khoản ngân hàng",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID tài khoản",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/shipping-methods/{id}": {
+      "get": {
+        "tags": [
+          "Shipping Method"
+        ],
+        "summary": "Lay phuong thuc van chuyen theo ID",
+        "description": "Public - khong can dang nhap.",
+        "operationId": "getById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID phuong thuc van chuyen",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseShippingMethodDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Shipping Method"
+        ],
+        "summary": "Cap nhat phuong thuc van chuyen (ADMIN)",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID phuong thuc van chuyen",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingMethodDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseShippingMethodDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Shipping Method"
+        ],
+        "summary": "Xoa phuong thuc van chuyen (ADMIN)",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID phuong thuc van chuyen",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/products/{id}": {
       "get": {
         "tags": [
           "Product"
         ],
         "summary": "Lấy sản phẩm theo ID",
-        "operationId": "getById_2",
+        "operationId": "getById_3",
         "parameters": [
           {
             "name": "id",
@@ -331,7 +563,7 @@
           "Product"
         ],
         "summary": "Cập nhật sản phẩm",
-        "operationId": "update_2",
+        "operationId": "update_4",
         "parameters": [
           {
             "name": "id",
@@ -378,7 +610,7 @@
         ],
         "summary": "Xóa sản phẩm",
         "description": "Không xóa được nếu sản phẩm đang có biến thể.",
-        "operationId": "delete_2",
+        "operationId": "delete_4",
         "parameters": [
           {
             "name": "id",
@@ -416,7 +648,7 @@
           "Product Variant"
         ],
         "summary": "Lấy biến thể theo ID",
-        "operationId": "getById_3",
+        "operationId": "getById_4",
         "parameters": [
           {
             "name": "id",
@@ -447,7 +679,7 @@
           "Product Variant"
         ],
         "summary": "Cập nhật biến thể",
-        "operationId": "update_3",
+        "operationId": "update_5",
         "parameters": [
           {
             "name": "id",
@@ -494,12 +726,333 @@
         ],
         "summary": "Xóa biến thể",
         "description": "Không xóa được nếu đang có tồn kho.",
-        "operationId": "delete_3",
+        "operationId": "delete_5",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID biến thể",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payment-types/{id}": {
+      "get": {
+        "tags": [
+          "Payment Type"
+        ],
+        "summary": "Lay loai thanh toan theo ID",
+        "description": "Public - khong can dang nhap.",
+        "operationId": "getById_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID loai thanh toan",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePaymentTypeDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Payment Type"
+        ],
+        "summary": "Cap nhat loai thanh toan (ADMIN)",
+        "description": "Chi ADMIN moi co quyen cap nhat.",
+        "operationId": "update_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID loai thanh toan",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentTypeDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePaymentTypeDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Payment Type"
+        ],
+        "summary": "Xoa loai thanh toan (ADMIN)",
+        "description": "Chi ADMIN moi co quyen xoa. Khong xoa duoc neu dang duoc su dung.",
+        "operationId": "delete_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID loai thanh toan",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payment-methods/{id}": {
+      "put": {
+        "tags": [
+          "Payment Method"
+        ],
+        "summary": "Cap nhat phuong thuc thanh toan",
+        "description": "Cap nhat thong tin (provider, account number, expiry date) cua 1 phuong thuc.",
+        "operationId": "updatePaymentMethod",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID phuong thuc thanh toan",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPaymentMethodDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUserPaymentMethodDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Payment Method"
+        ],
+        "summary": "Xoa phuong thuc thanh toan",
+        "description": "Khong xoa duoc neu phuong thuc dang duoc dung trong don hang.",
+        "operationId": "deletePaymentMethod",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID phuong thuc thanh toan",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/order-statuses/{id}": {
+      "get": {
+        "tags": [
+          "Order Status"
+        ],
+        "summary": "Lay trang thai don hang theo ID",
+        "description": "Public - khong can dang nhap.",
+        "operationId": "getById_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID trang thai",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderStatusDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Order Status"
+        ],
+        "summary": "Cap nhat trang thai don hang (ADMIN)",
+        "operationId": "update_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID trang thai",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderStatusDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderStatusDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Order Status"
+        ],
+        "summary": "Xoa trang thai don hang (ADMIN)",
+        "description": "Khong xoa duoc neu dang duoc su dung boi don hang.",
+        "operationId": "delete_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID trang thai",
             "required": true,
             "schema": {
               "type": "integer",
@@ -532,7 +1085,7 @@
           "Color"
         ],
         "summary": "Lấy màu sắc theo ID",
-        "operationId": "getById_4",
+        "operationId": "getById_7",
         "parameters": [
           {
             "name": "id",
@@ -563,7 +1116,7 @@
           "Color"
         ],
         "summary": "Cập nhật màu sắc",
-        "operationId": "update_4",
+        "operationId": "update_8",
         "parameters": [
           {
             "name": "id",
@@ -610,7 +1163,7 @@
         ],
         "summary": "Xóa màu sắc",
         "description": "Không xóa được nếu đang có biến thể sử dụng.",
-        "operationId": "delete_4",
+        "operationId": "delete_8",
         "parameters": [
           {
             "name": "id",
@@ -648,7 +1201,7 @@
           "Category"
         ],
         "summary": "Lấy danh mục theo ID",
-        "operationId": "getById_5",
+        "operationId": "getById_8",
         "parameters": [
           {
             "name": "id",
@@ -679,7 +1232,7 @@
           "Category"
         ],
         "summary": "Cập nhật danh mục",
-        "operationId": "update_5",
+        "operationId": "update_9",
         "parameters": [
           {
             "name": "id",
@@ -726,12 +1279,182 @@
         ],
         "summary": "Xóa danh mục",
         "description": "Không xóa được nếu có danh mục con hoặc sản phẩm.",
-        "operationId": "delete_5",
+        "operationId": "delete_9",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "description": "ID danh mục",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/cart/items/{itemId}": {
+      "put": {
+        "tags": [
+          "Shopping Cart"
+        ],
+        "summary": "Cap nhat so luong item trong gio",
+        "description": "Thay doi so luong (qty) cua 1 item dang co trong gio hang. qty phai \u003E= 1.",
+        "operationId": "updateItem",
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "ID item trong gio hang",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartItemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartSummaryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Shopping Cart"
+        ],
+        "summary": "Xoa 1 item khoi gio hang",
+        "description": "Xoa san pham co itemId ra khoi gio hang cua nguoi dung.",
+        "operationId": "removeItem",
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "ID item trong gio hang",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartSummaryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/addresses/{addressId}": {
+      "put": {
+        "tags": [
+          "User Address"
+        ],
+        "summary": "Cập nhật địa chỉ",
+        "operationId": "updateAddress",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID địa chỉ",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddressDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseAddressDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User Address"
+        ],
+        "summary": "Xóa địa chỉ",
+        "operationId": "deleteAddress",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID địa chỉ",
             "required": true,
             "schema": {
               "type": "integer",
@@ -869,6 +1592,122 @@
         ]
       }
     },
+    "/api/shop-bank-accounts": {
+      "get": {
+        "tags": [
+          "Shop Bank Account"
+        ],
+        "summary": "[ADMIN] Lấy tất cả tài khoản ngân hàng",
+        "operationId": "getAll_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListShopBankAccountDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Shop Bank Account"
+        ],
+        "summary": "[ADMIN] Thêm tài khoản ngân hàng",
+        "operationId": "create_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShopBankAccountDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseShopBankAccountDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/shipping-methods": {
+      "get": {
+        "tags": [
+          "Shipping Method"
+        ],
+        "summary": "Lay danh sach phuong thuc van chuyen",
+        "description": "Public - khong can dang nhap.",
+        "operationId": "getAll_3",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListShippingMethodDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Shipping Method"
+        ],
+        "summary": "Tao phuong thuc van chuyen (ADMIN)",
+        "operationId": "create_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingMethodDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseShippingMethodDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/sample-data/generate": {
       "post": {
         "tags": [
@@ -897,7 +1736,7 @@
           "Product"
         ],
         "summary": "Lấy tất cả sản phẩm",
-        "operationId": "getAll_2",
+        "operationId": "getAll_4",
         "responses": {
           "200": {
             "description": "OK",
@@ -917,7 +1756,7 @@
         ],
         "summary": "Tạo sản phẩm",
         "description": "Tạo mới sản phẩm. categoryId phải tồn tại, slug phải duy nhất.",
-        "operationId": "create_2",
+        "operationId": "create_4",
         "requestBody": {
           "content": {
             "application/json": {
@@ -953,7 +1792,7 @@
           "Product Variant"
         ],
         "summary": "Lấy tất cả biến thể",
-        "operationId": "getAll_3",
+        "operationId": "getAll_5",
         "responses": {
           "200": {
             "description": "OK",
@@ -973,7 +1812,7 @@
         ],
         "summary": "Tạo biến thể",
         "description": "Gắn một màu sắc vào sản phẩm. Mỗi cặp (product, color) là duy nhất.",
-        "operationId": "create_3",
+        "operationId": "create_5",
         "requestBody": {
           "content": {
             "application/json": {
@@ -991,6 +1830,243 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseProductVariantDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payment-types": {
+      "get": {
+        "tags": [
+          "Payment Type"
+        ],
+        "summary": "Lay danh sach loai thanh toan",
+        "description": "Public - khong can dang nhap.",
+        "operationId": "getAll_6",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListPaymentTypeDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Payment Type"
+        ],
+        "summary": "Tao loai thanh toan moi (ADMIN)",
+        "description": "Chi ADMIN moi co quyen tao.",
+        "operationId": "create_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentTypeDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePaymentTypeDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payment-methods": {
+      "get": {
+        "tags": [
+          "Payment Method"
+        ],
+        "summary": "Lay danh sach phuong thuc thanh toan",
+        "description": "Tra ve tat ca phuong thuc thanh toan da luu cua nguoi dung hien tai.",
+        "operationId": "getMyPaymentMethods",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListUserPaymentMethodDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Payment Method"
+        ],
+        "summary": "Them phuong thuc thanh toan",
+        "description": "Them phuong thuc thanh toan moi (Visa, MoMo, COD...). Neu la phuong thuc dau tien se tu dong dat lam mac dinh.",
+        "operationId": "addPaymentMethod",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPaymentMethodDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUserPaymentMethodDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Lich su don hang",
+        "description": "Lay danh sach tat ca don hang cua ban than, sap xep moi nhat truoc.",
+        "operationId": "getMyOrders",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Dat hang",
+        "description": "Tao don hang tu gio hang hien tai. Tu dong tru ton kho va lam trong gio hang sau khi dat thanh cong. Can co dia chi giao hang, phuong thuc van chuyen va phuong thuc thanh toan.",
+        "operationId": "placeOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/order-statuses": {
+      "get": {
+        "tags": [
+          "Order Status"
+        ],
+        "summary": "Lay danh sach trang thai don hang",
+        "description": "Public - khong can dang nhap.",
+        "operationId": "getAll_7",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListOrderStatusDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Order Status"
+        ],
+        "summary": "Tao trang thai don hang (ADMIN)",
+        "operationId": "create_7",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderStatusDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderStatusDTO"
                 }
               }
             }
@@ -1124,7 +2200,7 @@
           "Color"
         ],
         "summary": "Lấy tất cả màu sắc",
-        "operationId": "getAll_4",
+        "operationId": "getAll_8",
         "responses": {
           "200": {
             "description": "OK",
@@ -1143,7 +2219,7 @@
           "Color"
         ],
         "summary": "Tạo màu sắc",
-        "operationId": "create_4",
+        "operationId": "create_8",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1179,7 +2255,7 @@
           "Category"
         ],
         "summary": "Lấy tất cả danh mục",
-        "operationId": "getAll_5",
+        "operationId": "getAll_9",
         "responses": {
           "200": {
             "description": "OK",
@@ -1199,7 +2275,7 @@
         ],
         "summary": "Tạo danh mục",
         "description": "Tạo mới danh mục. parentId = null nếu là danh mục gốc.",
-        "operationId": "create_5",
+        "operationId": "create_9",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1217,6 +2293,43 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseCategoryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/cart/items": {
+      "post": {
+        "tags": [
+          "Shopping Cart"
+        ],
+        "summary": "Them san pham vao gio",
+        "description": "Them 1 san pham (variant_stock) vao gio. Neu san pham da co thi cong them so luong. Tra loi 400 neu vuot qua so luong ton kho.",
+        "operationId": "addItem",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartItemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartSummaryDTO"
                 }
               }
             }
@@ -1323,6 +2436,272 @@
             }
           }
         }
+      }
+    },
+    "/api/addresses": {
+      "get": {
+        "tags": [
+          "User Address"
+        ],
+        "summary": "Lấy danh sách địa chỉ của tôi",
+        "operationId": "getMyAddresses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListAddressDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "User Address"
+        ],
+        "summary": "Thêm địa chỉ mới",
+        "description": "Địa chỉ đầu tiên tự động được đặt làm mặc định.",
+        "operationId": "addAddress",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddressDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseAddressDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/shop-bank-accounts/{id}/active": {
+      "patch": {
+        "tags": [
+          "Shop Bank Account"
+        ],
+        "summary": "[ADMIN] Đặt tài khoản ngân hàng active",
+        "description": "Chỉ 1 tài khoản active tại 1 thời điểm. Khi set active cái mới, cái cũ tự động bị bỏ active.",
+        "operationId": "setActive",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID tài khoản",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseShopBankAccountDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/payment-methods/{id}/default": {
+      "patch": {
+        "tags": [
+          "Payment Method"
+        ],
+        "summary": "Dat lam phuong thuc thanh toan mac dinh",
+        "description": "Dat phuong thuc co id nay lam mac dinh, bo mac dinh cac phuong thuc khac.",
+        "operationId": "setDefault",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID phuong thuc thanh toan",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUserPaymentMethodDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/orders/{orderId}/cancel": {
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Huy don hang",
+        "description": "Chi duoc huy khi trang thai la PENDING. Tu dong hoan tra ton kho sau khi huy.",
+        "operationId": "cancelOrder",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID don hang",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/orders/admin/{orderId}/status": {
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "[ADMIN] Cap nhat trang thai don hang",
+        "description": "Thay doi trang thai don hang: PENDING → PROCESSING → SHIPPED → DELIVERED hoac CANCELLED.",
+        "operationId": "updateOrderStatus",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID don hang",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/addresses/{addressId}/default": {
+      "patch": {
+        "tags": [
+          "User Address"
+        ],
+        "summary": "Đặt địa chỉ mặc định",
+        "description": "Chỉ 1 địa chỉ mặc định. Cái cũ tự động bỏ mặc định.",
+        "operationId": "setDefault_1",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID địa chỉ",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseAddressDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/variant-stocks/variant/{variantId}": {
@@ -1469,6 +2848,28 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseListSizeDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shop-bank-accounts/active": {
+      "get": {
+        "tags": [
+          "Shop Bank Account"
+        ],
+        "summary": "Lấy tài khoản ngân hàng đang active",
+        "description": "Public - User xem để biết chuyển khoản vào đâu.",
+        "operationId": "getActive",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseShopBankAccountDTO"
                 }
               }
             }
@@ -1767,6 +3168,196 @@
         }
       }
     },
+    "/api/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Chi tiet 1 don hang",
+        "description": "Xem chi tiet don hang theo ID. Chi xem duoc don hang cua chinh minh.",
+        "operationId": "getMyOrderById",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID don hang",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/orders/admin/{orderId}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "[ADMIN] Xem bat ky don hang",
+        "description": "Admin co the xem chi tiet don hang cua bat ky user nao.",
+        "operationId": "getOrderById",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID don hang",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/orders/admin/by-status/{statusId}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "[ADMIN] Lay don hang theo trang thai",
+        "description": "Loc don hang theo statusId co phan trang.",
+        "operationId": "getOrdersByStatus",
+        "parameters": [
+          {
+            "name": "statusId",
+            "in": "path",
+            "description": "ID trang thai",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "So trang (tu 0)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "So luong moi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagedResponseOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/orders/admin/all": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "[ADMIN] Lay tat ca don hang",
+        "description": "Phan trang toan bo don hang trong he thong.",
+        "operationId": "getAllOrders",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "So trang (tu 0)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "So luong moi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponsePagedResponseOrderDetailDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/categories/{id}/children": {
       "get": {
         "tags": [
@@ -1852,6 +3443,58 @@
             }
           }
         }
+      }
+    },
+    "/api/cart": {
+      "get": {
+        "tags": [
+          "Shopping Cart"
+        ],
+        "summary": "Xem gio hang",
+        "description": "Lay toan bo thong tin gio hang cua nguoi dung hien tai kem chi tiet san pham, mau, size va tong tien.",
+        "operationId": "getMyCart",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartSummaryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Shopping Cart"
+        ],
+        "summary": "Lam trong gio hang",
+        "description": "Xoa toan bo san pham trong gio hang.",
+        "operationId": "clearCart",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/files/image/{fileName}": {
@@ -2026,6 +3669,118 @@
           },
           "data": {
             "$ref": "#/components/schemas/SizeDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ShopBankAccountDTO": {
+        "type": "object",
+        "description": "Thông tin tài khoản ngân hàng của shop",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID",
+            "readOnly": true
+          },
+          "bankId": {
+            "type": "string",
+            "description": "Mã ngân hàng VietQR (VCB, TCB, MB, ACB...)",
+            "example": "MB",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "bankName": {
+            "type": "string",
+            "description": "Tên ngân hàng",
+            "example": "Ngân hàng Quân Đội (MB Bank)",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "accountNumber": {
+            "type": "string",
+            "description": "Số tài khoản",
+            "example": "0123456789",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "accountHolderName": {
+            "type": "string",
+            "description": "Tên chủ tài khoản (viết HOA, không dấu)",
+            "example": "NGUYEN VAN A",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "logoUrl": {
+            "type": "string",
+            "description": "Logo ngân hàng (URL)"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Trạng thái hoạt động"
+          }
+        },
+        "required": [
+          "accountHolderName",
+          "accountNumber",
+          "bankId",
+          "bankName"
+        ]
+      },
+      "ApiResponseShopBankAccountDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ShopBankAccountDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ShippingMethodDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseShippingMethodDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ShippingMethodDTO"
           },
           "timestamp": {
             "type": "string",
@@ -2214,6 +3969,127 @@
           }
         }
       },
+      "PaymentTypeDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponsePaymentTypeDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PaymentTypeDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserPaymentMethodDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "accountNumber": {
+            "type": "string"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "isDefault": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "paymentTypeId"
+        ]
+      },
+      "ApiResponseUserPaymentMethodDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserPaymentMethodDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "OrderStatusDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseOrderStatusDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/OrderStatusDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "ColorDTO": {
         "type": "object",
         "description": "Thông tin màu sắc",
@@ -2339,6 +4215,192 @@
           }
         }
       },
+      "CartItemRequest": {
+        "type": "object",
+        "properties": {
+          "variantStockId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "qty": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "qty",
+          "variantStockId"
+        ]
+      },
+      "ApiResponseCartSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CartSummaryDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CartItemDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cartId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "variantStockId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "availableStock": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productSlug": {
+            "type": "string"
+          },
+          "variantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "colorName": {
+            "type": "string"
+          },
+          "colorHex": {
+            "type": "string"
+          },
+          "colorImageUrl": {
+            "type": "string"
+          },
+          "sizeLabel": {
+            "type": "string"
+          },
+          "sizeType": {
+            "type": "string"
+          }
+        }
+      },
+      "CartSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "cartId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartItemDetailDTO"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalAmount": {
+            "type": "number"
+          }
+        }
+      },
+      "AddressDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitNumber": {
+            "type": "string"
+          },
+          "streetNumber": {
+            "type": "string"
+          },
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          },
+          "countryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isDefault": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseAddressDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AddressDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "ApiResponseString": {
         "type": "object",
         "properties": {
@@ -2357,6 +4419,193 @@
           "timestamp": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "OrderRequest": {
+        "type": "object",
+        "description": "Yêu cầu đặt hàng",
+        "properties": {
+          "paymentTypeId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID loại thanh toán (COD, Chuyển khoản...)",
+            "example": 1
+          },
+          "shippingAddressId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID địa chỉ giao hàng",
+            "example": 1
+          },
+          "shippingMethodId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID phương thức vận chuyển",
+            "example": 1
+          },
+          "note": {
+            "type": "string",
+            "description": "Ghi chú đơn hàng",
+            "example": "Giao giờ hành chính"
+          }
+        },
+        "required": [
+          "paymentTypeId",
+          "shippingAddressId",
+          "shippingMethodId"
+        ]
+      },
+      "ApiResponseOrderDetailDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/OrderDetailDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "OrderDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderCode": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statusId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statusName": {
+            "type": "string"
+          },
+          "paymentTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentTypeName": {
+            "type": "string"
+          },
+          "paymentNote": {
+            "type": "string"
+          },
+          "qrUrl": {
+            "type": "string"
+          },
+          "bankInfo": {
+            "$ref": "#/components/schemas/ShopBankAccountDTO"
+          },
+          "shippingMethodId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shippingMethodName": {
+            "type": "string"
+          },
+          "shippingFee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shippingAddressId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shippingAddressDetail": {
+            "$ref": "#/components/schemas/AddressDTO"
+          },
+          "subtotal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderTotal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderLineDetailDTO"
+            }
+          }
+        }
+      },
+      "OrderLineDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "variantStockId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "subtotal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productSlug": {
+            "type": "string"
+          },
+          "variantId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "colorName": {
+            "type": "string"
+          },
+          "colorHex": {
+            "type": "string"
+          },
+          "colorImageUrl": {
+            "type": "string"
+          },
+          "sizeLabel": {
+            "type": "string"
+          },
+          "sizeType": {
+            "type": "string"
           }
         }
       },
@@ -2567,6 +4816,18 @@
           }
         }
       },
+      "UpdateOrderStatusRequest": {
+        "type": "object",
+        "properties": {
+          "statusId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "statusId"
+        ]
+      },
       "ApiResponseListVariantStockDTO": {
         "type": "object",
         "properties": {
@@ -2661,6 +4922,54 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SizeDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListShopBankAccountDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShopBankAccountDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListShippingMethodDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShippingMethodDTO"
             }
           },
           "timestamp": {
@@ -2771,6 +5080,156 @@
           }
         }
       },
+      "ApiResponseListPaymentTypeDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentTypeDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListUserPaymentMethodDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserPaymentMethodDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListOrderDetailDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderDetailDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponsePagedResponseOrderDetailDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PagedResponseOrderDetailDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PagedResponseOrderDetailDTO": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderDetailDTO"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "first": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseListOrderStatusDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderStatusDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "ApiResponseListColorDTO": {
         "type": "object",
         "properties": {
@@ -2811,6 +5270,30 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CategoryDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListAddressDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddressDTO"
             }
           },
           "timestamp": {

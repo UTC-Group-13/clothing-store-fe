@@ -1,14 +1,24 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Store, User, LogOut } from 'lucide-react';
-import { useCartStore } from '../../store/cartStore';
+import { useQuery } from '@tanstack/react-query';
+import { ShoppingCart, Store, User, LogOut, Package } from 'lucide-react';
+import { cartService } from '../../services/api';
 import { useAuthStore } from '../../store/authStore';
 import { authService } from '../../services/authApi';
 import toast from 'react-hot-toast';
 
 const Header = () => {
   const navigate = useNavigate();
-  const totalItems = useCartStore((state) => state.getTotalItems());
   const { user, isAuthenticated, logout } = useAuthStore();
+
+  // Fetch server-side cart count
+  const { data: cart } = useQuery({
+    queryKey: ['cart'],
+    queryFn: cartService.getCart,
+    enabled: isAuthenticated,
+    staleTime: 1000 * 30, // 30s cache
+  });
+
+  const totalItems = cart?.totalItems || 0;
 
   const handleLogout = () => {
     authService.logout();
@@ -33,6 +43,12 @@ const Header = () => {
             <Link to="/products" className="text-gray-700 hover:text-primary-600 transition">
               Sản phẩm
             </Link>
+            {isAuthenticated && (
+              <Link to="/orders" className="text-gray-700 hover:text-primary-600 transition flex items-center gap-1">
+                <Package className="w-4 h-4" />
+                Đơn hàng
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center space-x-4">
@@ -44,7 +60,7 @@ const Header = () => {
               <ShoppingCart className="w-6 h-6" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {totalItems}
+                  {totalItems > 99 ? '99+' : totalItems}
                 </span>
               )}
             </Link>

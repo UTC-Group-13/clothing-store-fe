@@ -159,3 +159,146 @@ export interface VariantStock {
   sizeType?: string;
 }
 
+// ============= CART API TYPES =============
+
+// Cart item request (add/update)
+export interface CartItemRequest {
+  variantStockId: number;
+  qty: number;
+}
+
+// Cart item detail from server
+export interface CartItemDetail {
+  id: number;
+  cartId: number;
+  variantStockId: number;
+  sku: string;
+  qty: number;
+  unitPrice: number;
+  subtotal: number;
+  availableStock: number;
+  productId: number;
+  productName: string;
+  productSlug: string;
+  variantId: number;
+  colorName: string;
+  colorHex: string;
+  colorImageUrl: string;
+  sizeLabel: string;
+  sizeType: string;
+}
+
+// Cart summary from server
+export interface CartSummary {
+  cartId: number;
+  userId: number;
+  items: CartItemDetail[];
+  totalItems: number;
+  totalAmount: number;
+}
+
+// ============= SHIPPING TYPES =============
+
+export interface ShippingMethod {
+  id: number;
+  name: string;
+  price: number;
+}
+
+// ============= PAYMENT TYPES =============
+
+export interface PaymentType {
+  id: number;
+  value: string;
+}
+
+
+// ============= SHOP BANK ACCOUNT =============
+
+export interface ShopBankAccount {
+  id: number;
+  bankId: string;
+  bankName: string;
+  accountNumber: string;
+  accountHolderName: string;
+  logoUrl?: string;
+  isActive: boolean;
+}
+
+// ============= ORDER TYPES =============
+
+export interface OrderRequest {
+  paymentTypeId: number;
+  shippingAddressId: number;
+  shippingMethodId: number;
+  note?: string;
+}
+
+export interface AddressDTO {
+  id: number;
+  unitNumber: string;
+  streetNumber: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  region: string;
+  postalCode: string;
+  countryId: number;
+  isDefault: boolean;
+}
+
+export interface AddressRequest {
+  unitNumber?: string;
+  streetNumber?: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  region: string;
+  postalCode?: string;
+  countryId?: number;
+}
+
+export interface OrderLineDetail {
+  id: number;
+  variantStockId: number;
+  sku: string;
+  qty: number;
+  price: number;
+  subtotal: number;
+  productId: number;
+  productName: string;
+  productSlug: string;
+  variantId: number;
+  colorName: string;
+  colorHex: string;
+  colorImageUrl: string;
+  sizeLabel: string;
+  sizeType: string;
+}
+
+export interface OrderDetail {
+  id: number;
+  orderCode: string;
+  userId: number;
+  orderDate: string;
+  statusId: number;
+  statusName: string;
+  paymentTypeId: number;
+  paymentTypeName: string;
+  paymentNote?: string;
+  qrUrl?: string;
+  bankInfo?: ShopBankAccount;
+  shippingMethodId: number;
+  shippingMethodName: string;
+  shippingFee: number;
+  shippingAddressId: number;
+  shippingAddressDetail: AddressDTO;
+  subtotal: number;
+  orderTotal: number;
+  items: OrderLineDetail[];
+}
+
+export interface OrderStatus {
+  id: number;
+  status: string;
+}

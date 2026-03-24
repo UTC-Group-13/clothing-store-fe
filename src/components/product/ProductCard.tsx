@@ -1,26 +1,23 @@
 import type { Product } from '../../types';
 import { ShoppingCart, Star } from 'lucide-react';
-import { useCartStore } from '../../store/cartStore';
 import { formatPrice, truncateText } from '../../utils/helpers';
-import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const addToCart = useCartStore((state) => state.addToCart);
+  const navigate = useNavigate();
   const price = product.basePrice || product.price || 0;
   const discountRate = ((product.id % 3) + 2) * 10;
   const originalPrice = price / (1 - discountRate / 100);
   const displayName = product.name || product.title || 'Sản phẩm';
   const displayImage = product.thumbnailUrl || product.image || 'https://via.placeholder.com/400x400?text=No+Image';
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleSelectOptions = (e: React.MouseEvent) => {
     e.preventDefault();
-    addToCart(product);
-    toast.success('Đã thêm vào giỏ hàng!');
+    navigate(`/product/${product.id}`);
   };
 
   return (
@@ -68,11 +65,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         <button
-          onClick={handleAddToCart}
+          onClick={handleSelectOptions}
           className="w-full bg-primary-600 text-white py-2.5 rounded-xl hover:bg-primary-700 transition flex items-center justify-center gap-2"
         >
           <ShoppingCart className="w-4 h-4" />
-          Thêm vào giỏ
+          Chọn mua
         </button>
       </div>
     </Link>

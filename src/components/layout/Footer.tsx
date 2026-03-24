@@ -30,6 +30,11 @@ const Footer = () => {
                   Giỏ hàng
                 </Link>
               </li>
+              <li>
+                <Link to="/orders" className="hover:text-white transition">
+                  Đơn hàng
+                </Link>
+              </li>
             </ul>
           </div>
 
