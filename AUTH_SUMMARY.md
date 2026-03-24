@@ -19,7 +19,7 @@ Hệ thống authentication hoàn chỉnh với Register, Login, User Session Ma
 
 ### 2. ✅ `src/services/authApi.ts` - Auth API Service
 **Features:**
-- Axios instance với base URL: `http://localhost:8080/api/auth`
+- Axios instance với base URL: `http://160.30.113.40:8080/api/auth`
 - `register()` method - POST /register
 - `login()` method - POST /login
 - `logout()` method - Clear localStorage
@@ -87,7 +87,7 @@ Full guide về authentication system
 
 ### ✅ Đăng Ký (Register)
 - **URL**: `/register`
-- **API**: `POST http://localhost:8080/api/auth/register`
+- **API**: `POST http://160.30.113.40:8080/api/auth/register`
 - **Fields**: username, email, phone, password, confirm password
 - **Validation**: Email format, phone 10 digits, password min 6 chars
 - **Success**: Toast + redirect to login
@@ -95,7 +95,7 @@ Full guide về authentication system
 
 ### ✅ Đăng Nhập (Login)
 - **URL**: `/login`
-- **API**: `POST http://localhost:8080/api/auth/login`
+- **API**: `POST http://160.30.113.40:8080/api/auth/login`
 - **Fields**: username, password
 - **Show/hide password**: Eye icon toggle
 - **Success**: Save token + user info + redirect to home
@@ -161,7 +161,7 @@ Full guide về authentication system
 
 ### Register API
 ```bash
-POST http://localhost:8080/api/auth/register
+POST http://160.30.113.40:8080/api/auth/register
 Content-Type: application/json
 
 {
@@ -174,7 +174,7 @@ Content-Type: application/json
 
 ### Login API
 ```bash
-POST http://localhost:8080/api/auth/login
+POST http://160.30.113.40:8080/api/auth/login
 Content-Type: application/json
 
 {

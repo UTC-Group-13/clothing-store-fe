@@ -19,7 +19,7 @@ Hệ thống đăng ký và đăng nhập đã được tích hợp hoàn chỉn
   - Số điện thoại 10 chữ số
   - Mật khẩu tối thiểu 6 ký tự
   - Xác nhận mật khẩu khớp
-- API: `POST http://localhost:8080/api/auth/register`
+- API: `POST http://160.30.113.40:8080/api/auth/register`
 
 ### 2. **Đăng Nhập (Login)**
 - URL: `/login`
@@ -27,7 +27,7 @@ Hệ thống đăng ký và đăng nhập đã được tích hợp hoàn chỉn
   - Tên đăng nhập (username)
   - Mật khẩu (password)
 - Show/hide password feature
-- API: `POST http://localhost:8080/api/auth/login`
+- API: `POST http://160.30.113.40:8080/api/auth/login`
 - Auto redirect về home sau login thành công
 
 ### 3. **User Session Management**
@@ -159,7 +159,7 @@ const ProtectedRoute = ({ children }) => {
 
 ### Register Request
 ```json
-POST http://localhost:8080/api/auth/register
+POST http://160.30.113.40:8080/api/auth/register
 {
   "username": "john_doe",
   "emailAddress": "john@example.com",
@@ -170,7 +170,7 @@ POST http://localhost:8080/api/auth/register
 
 ### Login Request
 ```json
-POST http://localhost:8080/api/auth/login
+POST http://160.30.113.40:8080/api/auth/login
 {
   "username": "john_doe",
   "password": "password123"
@@ -227,7 +227,7 @@ POST http://localhost:8080/api/auth/login
 ### Change API URL
 Edit `src/services/authApi.ts`:
 ```typescript
-const AUTH_API_BASE_URL = 'http://localhost:8080/api/auth';
+const AUTH_API_BASE_URL = 'http://160.30.113.40:8080/api/auth';
 // Change to your backend URL
 ```
 

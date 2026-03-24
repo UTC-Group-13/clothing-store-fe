@@ -232,7 +232,7 @@ This can be fixed later as it doesn't affect the main listing page.
 ### 🧪 Testing Checklist
 
 **Backend Required:**
-- [ ] Backend running on `http://localhost:8080`
+- [ ] Backend running on `http://160.30.113.40:8080`
 - [ ] Database populated with products, categories, colors, sizes
 - [ ] CORS enabled for frontend origin
 
@@ -272,7 +272,7 @@ This can be fixed later as it doesn't affect the main listing page.
 
 ```bash
 # Search with all filters
-curl 'http://localhost:8080/api/products/search?name=thun&categoryIds=24&colorIds=15&colorIds=16&minPrice=100000&maxPrice=500000&isActive=true&page=0&size=9&sortBy=basePrice&direction=ASC'
+curl 'http://160.30.113.40:8080/api/products/search?name=thun&categoryIds=24&colorIds=15&colorIds=16&minPrice=100000&maxPrice=500000&isActive=true&page=0&size=9&sortBy=basePrice&direction=ASC'
 ```
 
 ## Summary

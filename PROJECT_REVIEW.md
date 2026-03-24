@@ -17,7 +17,7 @@
 - React Query 5.90.21 (data fetching)
 - Axios 1.13.6
 
-**Backend API:** `http://localhost:8080/api`
+**Backend API:** `http://160.30.113.40:8080/api`
 
 ---
 
@@ -419,7 +419,7 @@ npm run build
 
 ### Environment Requirements
 ```
-Backend API: http://localhost:8080
+Backend API: http://160.30.113.40:8080
 CORS: Enabled for frontend origin
 Database: Populated with products, categories, colors, sizes
 ```
@@ -516,7 +516,7 @@ dist/assets/index-*.js          381.71 kB (gzip: 118.94 kB)
 ### API Base URL
 ```typescript
 // src/services/api.ts
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://160.30.113.40:8080/api';
 
 // Auth interceptor
 api.interceptors.request.use((config) => {

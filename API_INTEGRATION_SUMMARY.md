@@ -16,7 +16,7 @@ Added new TypeScript interfaces:
 
 ### 2. API Services (`src/services/api.ts`)
 **Updated Base URL:**
-- Changed from `https://fakestoreapi.com` to `http://localhost:8080/api`
+- Changed from `https://fakestoreapi.com` to `http://160.30.113.40:8080/api`
 
 **Added New Services:**
 - `colorService.getAllColors()` - Fetches all available colors
@@ -75,31 +75,31 @@ Added new TypeScript interfaces:
 
 ### Colors
 ```
-GET http://localhost:8080/api/colors
+GET http://160.30.113.40:8080/api/colors
 Response: ApiResponse<Color[]>
 ```
 
 ### Categories
 ```
-GET http://localhost:8080/api/categories
+GET http://160.30.113.40:8080/api/categories
 Response: ApiResponse<Category[]>
 ```
 
 ### Sizes
 ```
-GET http://localhost:8080/api/sizes
+GET http://160.30.113.40:8080/api/sizes
 Response: ApiResponse<Size[]>
 ```
 
 ### Products
 ```
-GET http://localhost:8080/api/products
+GET http://160.30.113.40:8080/api/products
 Response: ApiResponse<Product[]>
 
-GET http://localhost:8080/api/products/:id
+GET http://160.30.113.40:8080/api/products/:id
 Response: ApiResponse<Product>
 
-GET http://localhost:8080/api/products/category/:slug
+GET http://160.30.113.40:8080/api/products/category/:slug
 Response: ApiResponse<Product[]>
 ```
 
@@ -139,7 +139,7 @@ interface Product {
 ```
 
 ### Backend Requirements
-- Backend server must be running on `http://localhost:8080`
+- Backend server must be running on `http://160.30.113.40:8080`
 - All endpoints must return data in the specified `ApiResponse<T>` format
 - CORS must be enabled for frontend origin
 

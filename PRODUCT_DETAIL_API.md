@@ -367,7 +367,7 @@ If size M has priceOverride: null
 ### Backend Requirements:
 ```bash
 # 1. Start backend
-Backend running on http://localhost:8080
+Backend running on http://160.30.113.40:8080
 
 # 2. Create sample data (if not exists)
 POST /api/sample-data/generate
