@@ -40,14 +40,14 @@ const CheckoutPage = () => {
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthStore();
 
-  // State
+  // State.
   const [selectedShippingId, setSelectedShippingId] = useState<number | null>(null);
   const [selectedPaymentTypeId, setSelectedPaymentTypeId] = useState<number | null>(null);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
   const [note, setNote] = useState('');
   const [showAddressForm, setShowAddressForm] = useState(false);
 
-  // Address form state
+  // Address form state.
   const [addressForm, setAddressForm] = useState({
     unitNumber: '',
     streetNumber: '',
