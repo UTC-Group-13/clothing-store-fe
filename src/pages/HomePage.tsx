@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { productService } from '../services/api';
 import ProductList from '../components/product/ProductList';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import heroImage from '../assets/hero.png';
+import type { ProductSearchParams } from '../types';
 
 const BRAND_NAMES = ['VERSACE', 'ZARA', 'GUCCI', 'PRADA', 'Calvin Klein'];
 
@@ -29,15 +30,44 @@ const TESTIMONIALS = [
 const STYLE_TITLES = ['Casual', 'Formal', 'Party', 'Gym'];
 
 const HomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
   const handleNewsletterSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
-  const { data: products, isLoading: productsLoading } = useQuery({
+  // Fetch products for general use (style products, etc.)
+  const { data: products } = useQuery({
     queryKey: ['products'],
     queryFn: productService.getAllProducts,
+  });
+
+  // API call cho HÀNG MỚI VỀ - sản phẩm mới nhất theo thời gian tạo
+  const newArrivalsParams: ProductSearchParams = {
+    isActive: true,
+    page: 0,
+    size: 8,
+    sortBy: 'id', // Sort theo id DESC = mới nhất
+    direction: 'DESC',
+  };
+
+  const { data: newArrivalsPage, isLoading: newArrivalsLoading } = useQuery({
+    queryKey: ['products', 'newArrivals'],
+    queryFn: () => productService.searchProducts(newArrivalsParams),
+  });
+
+  // API call cho RẺ BẤT NGỜ - sản phẩm giá thấp nhất
+  const cheapestParams: ProductSearchParams = {
+    isActive: true,
+    page: 0,
+    size: 8,
+    sortBy: 'basePrice', // Sort theo giá tăng dần
+    direction: 'ASC',
+  };
+
+  const { data: cheapestPage, isLoading: cheapestLoading } = useQuery({
+    queryKey: ['products', 'cheapest'],
+    queryFn: () => productService.searchProducts(cheapestParams),
   });
 
   const { data: categories } = useQuery({
@@ -45,29 +75,42 @@ const HomePage = () => {
     queryFn: productService.getCategories,
   });
 
-  // Filter to only show parent categories (parentId is null)
-  const parentCategories = useMemo(() => {
-    return categories?.filter(cat => cat.parentId === null) || [];
+  // Filter to only show subcategories (parentId is not null) - giống ProductsPage
+  const displayCategories = useMemo(() => {
+    return categories?.filter(cat => cat.parentId !== null) || [];
   }, [categories]);
 
-  const { data: categoryProducts, isLoading: categoryLoading } = useQuery({
-    queryKey: ['products', selectedCategory],
-    queryFn: () => productService.getProductsByCategory(selectedCategory),
-    enabled: selectedCategory !== 'all',
+  // Build search params for category filter
+  const searchParams = useMemo((): ProductSearchParams => ({
+    categoryIds: selectedCategoryId ? [selectedCategoryId] : undefined,
+    isActive: true,
+    page: 0,
+    size: 8,
+    sortBy: 'id',
+    direction: 'DESC',
+  }), [selectedCategoryId]);
+
+  // Fetch products by category using searchProducts API
+  const { data: categoryProductsPage, isLoading: categoryLoading } = useQuery({
+    queryKey: ['products', 'category', selectedCategoryId, searchParams],
+    queryFn: () => productService.searchProducts(searchParams),
   });
 
-  const displayProducts = selectedCategory === 'all' ? products : categoryProducts;
-  const isLoading = selectedCategory === 'all' ? productsLoading : categoryLoading;
-  const newArrivals = useMemo(() => (products || []).slice(0, 4), [products]);
-  const topSelling = useMemo(
-    () => [...(products || [])].sort((a, b) => {
-      const rateA = a.rating?.rate || 0;
-      const rateB = b.rating?.rate || 0;
-      return rateB - rateA;
-    }).slice(0, 4),
-    [products]
-  );
+  // Display products from API response
+  const displayProducts = categoryProductsPage?.content || [];
+
+  const isLoading = categoryLoading;
+
+  // Lấy sản phẩm từ API response
+  const newArrivals = newArrivalsPage?.content || [];
+  const topSelling = cheapestPage?.content || [];
+  
   const styleProducts = useMemo(() => (products || []).slice(0, 4), [products]);
+
+  // Handle category selection
+  const handleCategorySelect = useCallback((categoryId: number | null) => {
+    setSelectedCategoryId(categoryId);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F2F0F1]">
@@ -135,9 +178,9 @@ const HomePage = () => {
       </div>
 
       <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl md:text-4xl font-black text-center text-gray-900">NEW ARRIVALS</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-center text-gray-900">HÀNG MỚI VỀ</h2>
         <div className="mt-8">
-          <ProductList products={newArrivals} isLoading={productsLoading} />
+          <ProductList products={newArrivals} isLoading={newArrivalsLoading} />
         </div>
         <div className="mt-8 text-center">
           <Link
@@ -150,9 +193,9 @@ const HomePage = () => {
       </section>
 
       <section className="container mx-auto px-4 pb-12">
-        <h2 className="text-3xl md:text-4xl font-black text-center text-gray-900">TOP SELLING</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-center text-gray-900">RẺ BẤT NGỜ</h2>
         <div className="mt-8">
-          <ProductList products={topSelling} isLoading={productsLoading} />
+          <ProductList products={topSelling} isLoading={cheapestLoading} />
         </div>
       </section>
 
@@ -199,24 +242,26 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Category Filter Section - Updated to use categoryIds */}
       <section className="container mx-auto px-4 pb-12">
-        <div className="flex flex-wrap gap-3 mb-8">
+        <h2 className="text-3xl md:text-4xl font-black text-center text-gray-900 mb-8">TẤT CẢ BỘ SƯU TẬP</h2>
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
           <button
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => handleCategorySelect(null)}
             className={`px-6 py-2 rounded-full font-semibold transition ${
-              selectedCategory === 'all'
+              selectedCategoryId === null
                 ? 'bg-black text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-100'
             }`}
           >
-            Tất cả bộ sưu tập
+            Tất cả
           </button>
-          {parentCategories?.map((category) => (
+          {displayCategories?.map((category) => (
             <button
               key={category.id}
-              onClick={() => setSelectedCategory(category.slug)}
-              className={`px-6 py-2 rounded-full font-semibold transition capitalize ${
-                selectedCategory === category.slug
+              onClick={() => handleCategorySelect(category.id)}
+              className={`px-6 py-2 rounded-full font-semibold transition ${
+                selectedCategoryId === category.id
                   ? 'bg-black text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
@@ -226,7 +271,7 @@ const HomePage = () => {
           ))}
         </div>
 
-        <ProductList products={displayProducts || []} isLoading={isLoading} />
+        <ProductList products={displayProducts} isLoading={isLoading} />
 
         <div className="bg-black text-white rounded-3xl p-6 md:p-8 mt-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
