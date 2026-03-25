@@ -1,30 +1,35 @@
 # 🛍️ ShopVN - Ecommerce Frontend
 
-Ứng dụng ecommerce hiện đại được xây dựng bằng **React 19**, **TypeScript**, **Vite**, và **Tailwind CSS**.
+Ứng dụng ecommerce thời trang Việt Nam được xây dựng bằng **React 19**, **TypeScript**, **Vite**, và **Tailwind CSS**. Kết nối backend Clothing Store API tại `http://160.30.113.40:8080/api`.
 
 ## ✨ Tính năng
 
-- 🏪 Hiển thị danh sách sản phẩm từ FakeStore API
-- 🔍 Lọc sản phẩm theo danh mục
-- 📄 Xem chi tiết sản phẩm
-- 🛒 Giỏ hàng với tính năng thêm/xóa/cập nhật số lượng
-- 💾 Lưu trữ giỏ hàng tự động (localStorage)
-- 📱 Responsive design - tối ưu cho mọi thiết bị
-- 🎨 UI đẹp mắt với Tailwind CSS
-- 🔔 Toast notifications cho user feedback
+### Khách hàng
+- 🏪 Hiển thị danh sách sản phẩm với tìm kiếm, bộ lọc (danh mục, màu sắc, kích cỡ, giá)
+- 📄 Xem chi tiết sản phẩm với biến thể (màu sắc, size, tồn kho)
+- 🛒 Giỏ hàng phía server (thêm/xóa/cập nhật số lượng)
+- 💳 Thanh toán với chọn địa chỉ, phương thức vận chuyển & thanh toán
+- 📦 Theo dõi đơn hàng và lịch sử mua hàng
+- 🔐 Đăng nhập / Đăng ký với JWT authentication
+- 📱 Responsive design — tối ưu cho mọi thiết bị
+
+### Quản trị (Admin)
+- 📊 Tổng quan dashboard (thống kê đơn hàng, doanh thu)
+- 📋 Quản lý đơn hàng (xem, cập nhật trạng thái)
+- 🏷️ Quản lý sản phẩm (xem, xóa, ẩn/hiện)
 
 ## 🚀 Công nghệ sử dụng
 
-- **Vite 8.0** - Build tool siêu nhanh
-- **React 19.2.4** - Framework UI hiện đại
-- **TypeScript 5.9** - Type safety
-- **Tailwind CSS 3.4.1** - Utility-first CSS
-- **React Router 7.13.1** - Client-side routing
-- **Zustand 5.0.12** - State management đơn giản với persist
-- **React Query 5.90.21** - Data fetching & caching
-- **Axios 1.13.6** - HTTP client
-- **Lucide React 0.577.0** - Beautiful icons
-- **React Hot Toast 2.6.0** - Notifications
+- **Vite 5.4** — Build tool siêu nhanh
+- **React 19.2** — Framework UI hiện đại
+- **TypeScript 5.9** — Type safety (`strict` mode, `verbatimModuleSyntax`)
+- **Tailwind CSS 3.4** — Utility-first CSS với bảng màu `primary` tùy chỉnh
+- **React Router 7.13** — Client-side routing (2 nhóm route: công khai + quản trị)
+- **Zustand 5.0** — State management với persist localStorage
+- **TanStack React Query 5.90** — Data fetching & caching
+- **Axios 1.13** — HTTP client với interceptor xác thực JWT
+- **Lucide React 0.577** — Icon library
+- **React Hot Toast 2.6** — Toast notifications
 
 ## 📦 Cài đặt
 
@@ -42,9 +47,9 @@ npm run dev
 
 ```bash
 npm run dev      # Chạy development server
-npm run build    # Build cho production
+npm run build    # Kiểm tra type (tsc -b) rồi build production (vite build)
+npm run lint     # Chạy ESLint (flat config, TS + React hooks)
 npm run preview  # Preview production build
-npm run lint     # Chạy ESLint
 ```
 
 ## 📁 Cấu trúc Project
@@ -52,103 +57,117 @@ npm run lint     # Chạy ESLint
 ```
 src/
 ├── components/
+│   ├── admin/           # AdminLayout, AdminRoute (guard)
 │   ├── layout/          # Header, Footer
-│   ├── product/         # ProductCard, ProductList
+│   ├── product/         # ProductCard, ProductList, ProductsGrid, FilterSidebar
 │   └── cart/            # CartItem
-├── pages/               # Route pages
+├── pages/
 │   ├── HomePage.tsx
 │   ├── ProductsPage.tsx
-│   ├── ProductDetailPage.tsx
-│   └── CartPage.tsx
-├── store/               # Zustand stores
-│   └── cartStore.ts
-├── services/            # API services
-│   └── api.ts
-├── types/               # TypeScript types
-│   └── index.ts
-├── utils/               # Helper functions
-│   └── helpers.ts
+│   ├── ProductDetailPageNew.tsx
+│   ├── CartPage.tsx
+│   ├── CheckoutPage.tsx
+│   ├── OrdersPage.tsx
+│   ├── OrderDetailPage.tsx
+│   ├── LoginPage.tsx
+│   ├── RegisterPage.tsx
+│   └── admin/
+│       ├── AdminDashboard.tsx
+│       ├── AdminOrders.tsx
+│       ├── AdminOrderDetail.tsx
+│       └── AdminProducts.tsx
+├── services/
+│   ├── api.ts           # Axios instance, interceptors, tất cả service objects
+│   └── authApi.ts       # API đăng nhập/đăng ký/đăng xuất
+├── store/
+│   ├── authStore.ts     # Zustand auth store (JWT, role, persist)
+│   └── cartStore.ts     # Zustand cart store (giỏ hàng cục bộ, legacy)
+├── types/
+│   └── index.ts         # Tất cả TypeScript interfaces
+├── utils/
+│   └── helpers.ts       # formatPrice (VND), getProductPrice, truncateText
 └── hooks/               # Custom hooks
 ```
 
-## 🎯 Features Chi tiết
-
-### Quản lý Sản phẩm
-- Hiển thị danh sách sản phẩm với hình ảnh, giá, đánh giá
-- Lọc theo danh mục (electronics, jewelery, men's clothing, women's clothing)
-- Xem chi tiết đầy đủ của từng sản phẩm
-- Loading states với skeleton screens
-
-### Giỏ hàng
-- Thêm sản phẩm vào giỏ hàng
-- Cập nhật số lượng (tăng/giảm)
-- Xóa sản phẩm khỏi giỏ
-- Tự động tính tổng tiền
-- Lưu trữ trong localStorage (không mất khi reload)
-- Badge hiển thị số lượng items
-
-### UI/UX
-- Responsive design
-- Loading states
-- Toast notifications
-- Smooth transitions
-- Mobile-friendly
-- Hover effects
-
 ## 🔗 API
 
-Project sử dụng [FakeStore API](https://fakestoreapi.com/)
+Project kết nối backend **Clothing Store API** tại `http://160.30.113.40:8080/api` (cấu hình qua biến môi trường `VITE_API_BASE_URL`).
 
-**Endpoints:**
-- `GET /products` - Lấy tất cả sản phẩm
-- `GET /products/:id` - Lấy sản phẩm theo ID
-- `GET /products/categories` - Lấy danh sách categories
-- `GET /products/category/:category` - Lấy sản phẩm theo category
+Tài liệu OpenAPI đầy đủ có tại file `swagger.json` trong thư mục gốc.
 
-## 🎨 Customization
+**Các nhóm endpoint chính:**
+- `GET /api/products/search` — Tìm kiếm sản phẩm (phân trang, lọc theo danh mục/màu/size/giá)
+- `GET /api/products/:id` — Chi tiết sản phẩm
+- `GET /api/categories` — Danh sách danh mục
+- `GET/POST/PUT/DELETE /api/cart/*` — Giỏ hàng phía server
+- `POST /api/orders` — Đặt hàng
+- `GET /api/orders` — Lịch sử đơn hàng
+- `POST /api/auth/login` — Đăng nhập (trả JWT)
+- `POST /api/auth/register` — Đăng ký
+- `GET /api/orders/admin/all` — Quản trị: danh sách đơn hàng
+- `PATCH /api/orders/admin/:id/status` — Quản trị: cập nhật trạng thái đơn
+
+**Wrapper phản hồi:** Mọi endpoint trả về `ApiResponse<T>` dạng `{ success, message, errorCode, data, timestamp }`. Luôn trích xuất dữ liệu qua `response.data.data`.
+
+## 🎨 Tuỳ chỉnh
 
 ### Thay đổi màu chủ đạo
 
-Edit `tailwind.config.js`:
+Sửa file `tailwind.config.js` — thang màu `primary` (mặc định: xanh da trời):
 ```js
 theme: {
   extend: {
     colors: {
       primary: {
-        // Customize colors here
+        600: '#0284c7', // Nút bấm
+        700: '#0369a1', // Hover
+        // ...
       }
     }
   }
 }
 ```
 
-### Thay đổi API
+### Thay đổi API backend
 
-Edit `src/services/api.ts`:
-```typescript
-const API_BASE_URL = 'your-api-url';
+Tạo file `.env` tại thư mục gốc:
+```env
+VITE_API_BASE_URL=https://your-api-url.com/api
 ```
 
-## 📝 Development Notes
+## 📝 Lưu ý phát triển
 
-- **TypeScript**: Sử dụng `import type` cho type-only imports (do `verbatimModuleSyntax` enabled)
-- **Cart state**: Tự động lưu vào localStorage với key: `cart-storage`
-- **React Query**: Config `refetchOnWindowFocus: false`
-- **Toaster**: Đã được setup trong `main.tsx`
-- **Price format**: USD (có thể convert sang VND bằng `formatPrice()`)
-- **Tailwind**: Sử dụng version 3.4.1 (stable, không phải v4)
+- **TypeScript**: Sử dụng `import type` cho type-only imports (do `verbatimModuleSyntax` bật)
+- **Ngôn ngữ giao diện**: Tiếng Việt cho toàn bộ chuỗi hiển thị
+- **Định dạng giá**: Dùng `formatPrice()` từ `src/utils/helpers.ts` (VND). Không format thủ công
+- **Icon**: Chỉ dùng `lucide-react` — không sử dụng thư viện icon khác
+- **Thông báo**: `react-hot-toast` — `toast.success()` / `toast.error()`
+- **URL hình ảnh**: Backend có thể trả path tương đối, cần thêm `http://160.30.113.40:8080` phía trước (xem `getImageUrl` trong `CheckoutPage.tsx`)
+- **Tailwind**: Sử dụng version 3.4 (stable, không phải v4)
 
-**TypeScript Example:**
+**Ví dụ TypeScript:**
 ```typescript
-// Correct ✅
+// Đúng ✅
 import type { Product } from './types';
 import { useCartStore } from './store/cartStore';
 
-// Incorrect ❌ - Will cause TS1484 error
+// Sai ❌ — Gây lỗi TS1484
 import { Product } from './types';
 ```
 
-## 🐛 Troubleshooting
+## 🐳 Triển khai Docker
+
+```bash
+# Build image
+docker build -t shopvn-frontend .
+
+# Chạy container (cổng 3000)
+docker run -p 3000:3000 shopvn-frontend
+```
+
+Production build chạy trên nginx, cổng 3000, với SPA routing (`try_files $uri /index.html`).
+
+## 🐛 Xử lý lỗi
 
 **Nếu gặp lỗi Tailwind CSS:**
 ```bash
@@ -156,7 +175,7 @@ npm install -D tailwindcss@3.4.1 postcss autoprefixer
 npm install
 ```
 
-**Clear cache:**
+**Xóa cache:**
 ```bash
 rm -rf node_modules package-lock.json
 npm install
@@ -166,11 +185,10 @@ npm install
 
 MIT License
 
-## 👨‍💻 Author
+## 👨‍💻 Tác giả
 
-Built with ❤️ by ShopVN Team
+Được xây dựng với ❤️ bởi ShopVN Team
 
 ---
 
 **Happy Coding! 🚀**
-

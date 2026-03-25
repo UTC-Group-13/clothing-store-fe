@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { orderService } from '../services/api';
+import { orderService, reviewService } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import { formatPrice } from '../utils/helpers';
+import WriteReviewModal from '../components/product/WriteReviewModal';
 import {
   ArrowLeft, Package, Truck, CreditCard, MapPin,
   Loader2, XCircle, CheckCircle2, Clock, RotateCcw,
-  Building2, QrCode, Copy
+  Building2, QrCode, Copy, Star
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -73,6 +75,24 @@ const OrderDetailPage = () => {
       toast.error(error?.response?.data?.message || 'Không thể hủy đơn hàng');
     },
   });
+
+  // Review state
+  const [reviewTarget, setReviewTarget] = useState<{
+    orderLineId: number;
+    productName: string;
+    colorName: string;
+    sizeLabel: string;
+  } | null>(null);
+
+  // Fetch user's reviews to check which order lines are already reviewed
+  const { data: myReviews = [] } = useQuery({
+    queryKey: ['my-reviews'],
+    queryFn: reviewService.getMyReviews,
+    enabled: isAuthenticated,
+  });
+
+  // Set of order_line IDs already reviewed
+  const reviewedOrderLineIds = new Set(myReviews.map((r) => r.orderedProductId));
 
   const handleCancel = () => {
     if (window.confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
@@ -333,8 +353,11 @@ const OrderDetailPage = () => {
                 Sản phẩm ({order.items.length})
               </h2>
               <div className="space-y-4">
-                {order.items.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-3 bg-gray-50 rounded-lg">
+                {order.items.map((item) => {
+                  const alreadyReviewed = reviewedOrderLineIds.has(item.id);
+                  return (
+                  <div key={item.id} className="p-3 bg-gray-50 rounded-lg">
+                    <div className="flex gap-4">
                     <Link to={`/product/${item.productId}`}>
                       <img
                         src={getImageUrl(item.colorImageUrl)}
@@ -371,8 +394,36 @@ const OrderDetailPage = () => {
                       <p className="text-sm text-gray-500">× {item.qty}</p>
                       <p className="font-bold text-gray-900 mt-1">{formatPrice(item.subtotal)}</p>
                     </div>
+                    </div>
+                    {/* Review button — only for DELIVERED orders */}
+                    {order.statusName === 'DELIVERED' && (
+                      <div className="mt-2 pt-2 border-t border-gray-200 flex justify-end">
+                        {alreadyReviewed ? (
+                          <span className="inline-flex items-center gap-1.5 text-xs text-green-600 font-medium px-3 py-1.5 bg-green-50 rounded-full">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            Đã đánh giá
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              setReviewTarget({
+                                orderLineId: item.id,
+                                productName: item.productName,
+                                colorName: item.colorName,
+                                sizeLabel: item.sizeLabel,
+                              })
+                            }
+                            className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 text-primary-600 border border-primary-300 rounded-full hover:bg-primary-50 transition"
+                          >
+                            <Star className="w-3.5 h-3.5" />
+                            Đánh giá
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -485,6 +536,17 @@ const OrderDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Review Modal */}
+      {reviewTarget && (
+        <WriteReviewModal
+          orderLineId={reviewTarget.orderLineId}
+          productName={reviewTarget.productName}
+          colorName={reviewTarget.colorName}
+          sizeLabel={reviewTarget.sizeLabel}
+          onClose={() => setReviewTarget(null)}
+        />
+      )}
     </div>
   );
 };

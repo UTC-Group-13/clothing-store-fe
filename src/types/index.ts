@@ -330,3 +330,36 @@ export interface ProductRequest {
   isActive: boolean;
   thumbnailUrl?: string;
 }
+
+// ============= REVIEW TYPES =============
+
+export interface ReviewResponse {
+  id: number;
+  userId: number;
+  username: string;
+  orderedProductId: number;
+  ratingValue: number;
+  comment: string;
+  createdAt: string;
+  productId: number;
+  productName: string;
+  productSlug: string;
+  colorName: string;
+  colorHex: string;
+  colorImageUrl: string;
+  sizeLabel: string;
+  sizeType: string;
+  sku: string;
+}
+
+export interface ReviewSummary {
+  productId: number;
+  avgRating: number;
+  totalReviews: number;
+}
+
+export interface CreateReviewRequest {
+  orderedProductId: number;
+  ratingValue: number;
+  comment?: string;
+}

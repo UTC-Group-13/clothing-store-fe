@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Minus, Plus, ShoppingCart, Check } from 'lucide-react';
-import { productService, productVariantService, variantStockService, colorService, sizeService, cartService } from '../services/api';
+import { ArrowLeft, Minus, Plus, ShoppingCart, Check, Star } from 'lucide-react';
+import { productService, productVariantService, variantStockService, colorService, sizeService, cartService, reviewService } from '../services/api';
 import { useAuthStore } from '../store/authStore';
+import ProductReviews from '../components/product/ProductReviews';
+import ProductCard from '../components/product/ProductCard';
 import toast from 'react-hot-toast';
 
 const ProductDetailPage = () => {
@@ -64,6 +66,32 @@ const ProductDetailPage = () => {
     queryFn: () => productVariantService.getByProductId(Number(id)),
     enabled: !!id,
   });
+
+  // 2b. Fetch review summary
+  const { data: reviewSummary } = useQuery({
+    queryKey: ['review-summary', Number(id)],
+    queryFn: () => reviewService.getSummary(Number(id)),
+    enabled: !!id,
+  });
+
+  // 2c. Fetch related products by same category
+  const { data: relatedProductsData } = useQuery({
+    queryKey: ['related-products', product?.categoryId],
+    queryFn: () =>
+      productService.searchProducts({
+        categoryIds: [product!.categoryId],
+        isActive: true,
+        page: 0,
+        size: 4,
+      }),
+    enabled: !!product?.categoryId,
+  });
+
+  const relatedProducts = useMemo(() => {
+    if (!relatedProductsData?.content) return [];
+    // Loại bỏ sản phẩm hiện tại khỏi danh sách
+    return relatedProductsData.content.filter((p) => p.id !== Number(id));
+  }, [relatedProductsData, id]);
 
   // Set default variant when variants load
   useMemo(() => {
@@ -280,6 +308,32 @@ const ProductDetailPage = () => {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {product.name}
               </h1>
+              {/* Review Summary */}
+              {reviewSummary && reviewSummary.totalReviews > 0 && (
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-0.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-4 h-4 ${
+                          star <= Math.round(reviewSummary.avgRating)
+                            ? 'text-yellow-400 fill-yellow-400'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">
+                    {reviewSummary.avgRating.toFixed(1)}
+                  </span>
+                  <a
+                    href="#reviews"
+                    className="text-sm text-primary-600 hover:underline"
+                  >
+                    ({reviewSummary.totalReviews} đánh giá)
+                  </a>
+                </div>
+              )}
               <p className="text-gray-600">{product.description}</p>
             </div>
 
@@ -515,6 +569,27 @@ const ProductDetailPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <div id="reviews" className="mt-16 border-t border-gray-200 pt-2">
+          <ProductReviews productId={Number(id)} />
+        </div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-16 border-t border-gray-200 pt-10">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center w-full uppercase tracking-wide">
+                Sản Phẩm Liên Quan
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {relatedProducts.slice(0, 4).map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

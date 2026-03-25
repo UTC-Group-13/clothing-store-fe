@@ -6,7 +6,8 @@ import type {
   ShippingMethod, PaymentType, ShopBankAccount,
   OrderDetail, OrderRequest, OrderStatus,
   AddressDTO, AddressRequest,
-  AdminPagedResponse, UpdateOrderStatusRequest, ProductRequest
+  AdminPagedResponse, UpdateOrderStatusRequest, ProductRequest,
+  ReviewResponse, ReviewSummary, CreateReviewRequest
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://160.30.113.40:8080/api';
@@ -273,6 +274,33 @@ export const adminProductService = {
 
   deleteProduct: async (id: number): Promise<void> => {
     await api.delete(`/products/${id}`);
+  },
+};
+
+// ============= REVIEW API =============
+export const reviewService = {
+  getByProduct: async (productId: number): Promise<ReviewResponse[]> => {
+    const response = await api.get<ApiResponse<ReviewResponse[]>>(`/reviews/product/${productId}`);
+    return response.data.data;
+  },
+
+  getSummary: async (productId: number): Promise<ReviewSummary> => {
+    const response = await api.get<ApiResponse<ReviewSummary>>(`/reviews/product/${productId}/summary`);
+    return response.data.data;
+  },
+
+  create: async (data: CreateReviewRequest): Promise<ReviewResponse> => {
+    const response = await api.post<ApiResponse<ReviewResponse>>('/reviews', data);
+    return response.data.data;
+  },
+
+  getMyReviews: async (): Promise<ReviewResponse[]> => {
+    const response = await api.get<ApiResponse<ReviewResponse[]>>('/reviews/my');
+    return response.data.data;
+  },
+
+  delete: async (reviewId: number): Promise<void> => {
+    await api.delete(`/reviews/${reviewId}`);
   },
 };
 

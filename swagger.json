@@ -15,7 +15,7 @@
   },
   "servers": [
     {
-      "url": "http://160.30.113.40:8080",
+      "url": "http://localhost:8080",
       "description": "Generated server url"
     }
   ],
@@ -52,6 +52,10 @@
     {
       "name": "Size",
       "description": "API quản lý size sản phẩm"
+    },
+    {
+      "name": "Review",
+      "description": "API danh gia san pham"
     },
     {
       "name": "Shop Bank Account",
@@ -1730,6 +1734,43 @@
         }
       }
     },
+    "/api/reviews": {
+      "post": {
+        "tags": [
+          "Review"
+        ],
+        "summary": "Tao danh gia",
+        "description": "Danh gia san pham da mua. Yeu cau: 1) Don hang phai o trang thai DELIVERED. 2) Chi danh gia 1 lan cho moi order_line. 3) Diem tu 1-5 sao.",
+        "operationId": "createReview",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseReviewResponseDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/products": {
       "get": {
         "tags": [
@@ -2877,6 +2918,101 @@
         }
       }
     },
+    "/api/reviews/product/{productId}": {
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "summary": "Xem danh gia theo san pham",
+        "description": "Lay tat ca danh gia cua 1 san pham, sap xep moi nhat truoc. Khong can dang nhap.",
+        "operationId": "getReviewsByProduct",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID san pham",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListReviewResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews/product/{productId}/summary": {
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "summary": "Thong ke danh gia san pham",
+        "description": "Lay diem trung binh va tong so danh gia cua 1 san pham. Khong can dang nhap.",
+        "operationId": "getReviewSummary",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID san pham",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseReviewSummaryDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews/my": {
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "summary": "Xem danh gia cua toi",
+        "description": "Lay tat ca danh gia ma ban da viet, sap xep moi nhat truoc.",
+        "operationId": "getMyReviews",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListReviewResponseDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/products/slug/{slug}": {
       "get": {
         "tags": [
@@ -3478,6 +3614,45 @@
         "summary": "Lam trong gio hang",
         "description": "Xoa toan bo san pham trong gio hang.",
         "operationId": "clearCart",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/reviews/{reviewId}": {
+      "delete": {
+        "tags": [
+          "Review"
+        ],
+        "summary": "Xoa danh gia",
+        "description": "Chi xoa duoc danh gia cua chinh minh.",
+        "operationId": "deleteReview",
+        "parameters": [
+          {
+            "name": "reviewId",
+            "in": "path",
+            "description": "ID danh gia",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -4422,6 +4597,117 @@
           }
         }
       },
+      "CreateReviewRequest": {
+        "type": "object",
+        "description": "Yeu cau tao danh gia san pham",
+        "properties": {
+          "orderedProductId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID cua order_line (dong san pham da mua)",
+            "example": 1
+          },
+          "ratingValue": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Diem danh gia (1-5 sao)",
+            "example": 5,
+            "maximum": 5,
+            "minimum": 1
+          },
+          "comment": {
+            "type": "string",
+            "description": "Noi dung danh gia",
+            "example": "San pham rat dep, chat luong tot!",
+            "maxLength": 2000,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "orderedProductId",
+          "ratingValue"
+        ]
+      },
+      "ApiResponseReviewResponseDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ReviewResponseDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReviewResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string"
+          },
+          "orderedProductId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ratingValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productSlug": {
+            "type": "string"
+          },
+          "colorName": {
+            "type": "string"
+          },
+          "colorHex": {
+            "type": "string"
+          },
+          "colorImageUrl": {
+            "type": "string"
+          },
+          "sizeLabel": {
+            "type": "string"
+          },
+          "sizeType": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          }
+        }
+      },
       "OrderRequest": {
         "type": "object",
         "description": "Yêu cầu đặt hàng",
@@ -4975,6 +5261,68 @@
           "timestamp": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListReviewResponseDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewResponseDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseReviewSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ReviewSummaryDTO"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReviewSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "avgRating": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalReviews": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

@@ -1,211 +1,78 @@
-# AI Agent Guide - ShopVN Ecommerce
+# AGENTS.md — ShopVN Ecommerce Frontend
 
-## Project Overview
+## Kiến trúc
 
-ShopVN is a modern ecommerce frontend application built with **Vite**, **React 19**, **TypeScript**, and **Tailwind CSS**. The project uses the FakeStore API for product data and implements a complete shopping cart experience.
+Ứng dụng SPA sử dụng React 19 + TypeScript cho cửa hàng thời trang Việt Nam. Build bằng Vite, giao diện Tailwind CSS, triển khai qua Docker/nginx trên cổng 3000.
 
-## Tech Stack
+**Công nghệ:** React 19, React Router 7, Zustand (quản lý state), TanStack React Query (dữ liệu từ server), Axios (HTTP), Tailwind CSS 3, Lucide icons, react-hot-toast.
 
-- **Build Tool**: Vite 8.0
-- **Framework**: React 19.2.4 with TypeScript 5.9
-- **Styling**: Tailwind CSS 3.4.1
-- **Routing**: React Router DOM v7.13.1
-- **State Management**: Zustand 5.0.12 (with persist middleware)
-- **Data Fetching**: TanStack React Query 5.90.21
-- **HTTP Client**: Axios 1.13.6
-- **Icons**: Lucide React 0.577.0
-- **Notifications**: React Hot Toast 2.6.0
+**Hai nhóm route** trong `src/App.tsx`:
+- **Route công khai** (`/`, `/products`, `/product/:id`, `/cart`, `/checkout`, `/orders`, `/login`, `/register`) — bọc trong `<Header>` + `<Footer>`.
+- **Route quản trị** (`/admin/*`) — layout riêng qua `AdminLayout` (sidebar điều hướng + `<Outlet>`), được bảo vệ bởi `AdminRoute` kiểm tra `role === 'ADMIN'` từ auth store.
 
-## Architecture
+## Luồng dữ liệu & Quản lý State
 
-### Project Structure
-```
-src/
-├── components/
-│   ├── layout/          # Header, Footer
-│   ├── product/         # ProductCard, ProductList
-│   └── cart/            # CartItem
-├── pages/               # HomePage, ProductsPage, ProductDetailPage, CartPage
-├── store/               # Zustand stores (cartStore.ts)
-├── services/            # API services (api.ts)
-├── types/               # TypeScript interfaces
-├── utils/               # Helper functions (formatPrice, truncateText)
-└── hooks/               # Custom React hooks (empty for now)
-```
+- **State từ server**: Toàn bộ dữ liệu API được fetch qua `@tanstack/react-query`. QueryClient cấu hình trong `src/main.tsx` với `refetchOnWindowFocus: false, retry: 1`. Sử dụng `useQuery`/`useMutation` + `queryClient.invalidateQueries()` để quản lý cache.
+- **State phía client**: Hai Zustand store với middleware `persist` (localStorage):
+  - `useAuthStore` (key `auth-storage`) — phiên đăng nhập, JWT token, vai trò người dùng.
+  - `useCartStore` (key `cart-storage`) — giỏ hàng cục bộ (pattern cũ; checkout sử dụng giỏ hàng phía server qua `cartService`).
+- **Luồng token xác thực**: Interceptor trong `api.ts` đọc từ `localStorage('auth-storage')` → parse JSON persist của Zustand → lấy `state.user.accessToken` → gán header `Authorization: Bearer`. Khi gặp lỗi 401, xóa storage và chuyển hướng về `/login`.
 
-### State Management
-- **Cart State**: Zustand store with localStorage persistence (`cartStore.ts`)
-- **Server State**: React Query for API data caching and synchronization
-- Cart operations: addToCart, removeFromCart, updateQuantity, clearCart, getTotalPrice, getTotalItems
+## Tầng API
 
-### API Integration
-- Base URL: `https://fakestoreapi.com`
-- Endpoints:
-  - `GET /products` - All products
-  - `GET /products/:id` - Single product
-  - `GET /products/categories` - Categories list
-  - `GET /products/category/:category` - Products by category
+Toàn bộ lời gọi backend nằm trong `src/services/api.ts` (chính) và `src/services/authApi.ts` (xác thực). URL backend: biến môi trường `VITE_API_BASE_URL` (mặc định `http://160.30.113.40:8080/api`).
 
-### Routing Structure
-- `/` - Home page with featured products and category filters
-- `/products` - All products page
-- `/product/:id` - Product detail page
-- `/cart` - Shopping cart page
+**Wrapper phản hồi API** — mọi endpoint trả về `ApiResponse<T>` có dạng `{ success, message, errorCode, data, timestamp }`. Luôn trích xuất dữ liệu qua `response.data.data`.
 
-## Development Workflow
-
-### Setup & Installation
-```bash
-npm install
-```
-
-### Running the Project
-```bash
-npm run dev          # Start development server (usually http://localhost:5173)
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
-```
-
-### Adding New Features
-
-**New Component Pattern:**
-```tsx
-// Use TypeScript interfaces from types/index.ts
-import type { Product } from '../../types';
-
-interface ComponentProps {
-  product: Product;
-}
-
-const Component = ({ product }: ComponentProps) => {
-  // Use Tailwind classes for styling
-  return <div className="bg-white rounded-lg shadow-md">...</div>;
-};
-
-export default Component;
-```
-
-export default Component;
-```
-
-**API Service Pattern:**
-```typescript
-// Add to services/api.ts
-export const productService = {
-  newEndpoint: async (): Promise<Type> => {
-    const response = await api.get('/endpoint');
-    return response.data;
+**Đối tượng service** (không dùng class): `productService`, `cartService`, `orderService`, `addressService`, `shippingService`, `adminOrderService`, `adminProductService`, v.v. Khi thêm service mới, tuân theo mẫu sau:
+```ts
+export const fooService = {
+  getAll: async (): Promise<Foo[]> => {
+    const response = await api.get<ApiResponse<Foo[]>>('/foo');
+    return response.data.data;
   },
 };
 ```
 
-**Zustand Store Pattern:**
-```typescript
-// Create new store in store/ directory
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+Tài liệu OpenAPI của backend có sẵn tại file `swagger.json` ở thư mục gốc dự án để tham khảo.
 
-interface StoreState {
-  data: Type;
-  actions: () => void;
-}
+## Kiểu dữ liệu (Types)
 
-export const useStore = create<StoreState>()(
-  persist(
-    (set, get) => ({
-      data: initialValue,
-      actions: () => set({ ... }),
-    }),
-    { name: 'store-name' }
-  )
-);
+Toàn bộ kiểu TypeScript dùng chung nằm trong `src/types/index.ts`. Các kiểu chính: `Product`, `ProductVariant`, `VariantStock`, `CartSummary`, `CartItemDetail`, `OrderDetail`, `OrderRequest`, `AddressDTO`. Phân trang sử dụng `PageResponse<T>` (`content`, `pageNumber`, `totalPages`, v.v.).
+
+`Product` có tương thích hai trường (`basePrice`/`price`, `name`/`title`, `thumbnailUrl`/`image`) để hỗ trợ FakeStore API cũ — sử dụng hàm trợ giúp `getProductPrice()` từ `src/utils/helpers.ts`.
+
+## Quy ước quan trọng
+
+- **Định dạng tiền tệ**: Dùng `formatPrice()` (VND) từ `src/utils/helpers.ts`. Không bao giờ tự format thủ công.
+- **Ngôn ngữ giao diện**: Tiếng Việt cho toàn bộ chuỗi hiển thị (nút bấm, nhãn, thông báo toast, tiêu đề).
+- **Icon**: Chỉ dùng `lucide-react` — không sử dụng thư viện icon nào khác.
+- **Thông báo**: `react-hot-toast` — `toast.success()` / `toast.error()`. Toaster đặt trong `main.tsx`.
+- **URL hình ảnh**: Backend có thể trả đường dẫn tương đối; thêm `http://160.30.113.40:8080` phía trước khi URL không bắt đầu bằng `http` (xem mẫu `getImageUrl` trong `CheckoutPage.tsx`).
+- **Bảng màu chủ đạo**: Thang màu `primary` tùy chỉnh (xanh da trời) định nghĩa trong `tailwind.config.js`. Dùng `primary-600` cho nút bấm, `primary-700` khi hover.
+- **Tối ưu render**: Các component nặng bộ lọc (`FilterSidebar`, `ProductsGrid`) sử dụng `memo()` để tránh re-render không cần thiết.
+
+## Các lệnh
+
+```bash
+npm run dev      # Chạy server phát triển tại http://localhost:5173
+npm run build    # tsc -b && vite build (kiểm tra kiểu dữ liệu rồi đóng gói)
+npm run lint     # ESLint (cấu hình flat, bao gồm TS + React hooks + React Refresh)
+npm run preview  # Xem trước bản build production
 ```
 
-## Project Conventions
+Chưa cấu hình framework test. Chưa có CI pipeline trong repo.
 
-### TypeScript
-- All components use `.tsx` extension
-- Strict type checking enabled with `verbatimModuleSyntax`
-- **Important**: Use `import type` for type-only imports
-- Interfaces defined in `types/index.ts`
-- Props interfaces named `ComponentNameProps`
+## Tổ chức thư mục
 
-**Type Import Pattern:**
-```typescript
-// Correct ✅
-import type { Product, CartItem } from '../types';
-import { useCartStore } from '../store/cartStore';
-
-// Incorrect ❌
-import { Product, CartItem } from '../types';  // Will cause TS1484 error
-```
-
-### Styling with Tailwind
-- **Primary color**: `primary-{50-900}` (blue theme)
-- **Responsive**: Mobile-first with `sm:`, `md:`, `lg:`, `xl:` breakpoints
-- **Common patterns**:
-  - Cards: `bg-white rounded-lg shadow-md`
-  - Buttons: `bg-primary-600 hover:bg-primary-700 transition`
-  - Container: `container mx-auto px-4`
-
-### Component Organization
-- Components are functional with hooks
-- Use `useCartStore` for cart operations
-- Use `useQuery` for data fetching
-- Toast notifications for user feedback
-
-### Formatting & Utilities
-- Price formatting: `formatPriceUSD()` for USD, `formatPrice()` for VND
-- Text truncation: `truncateText(text, maxLength)`
-- Icons from lucide-react: `<ShoppingCart />`, `<Star />`, etc.
-
-## Key Files
-
-- `src/App.tsx` - Main router setup with layout
-- `src/main.tsx` - React Query provider and Toast setup
-- `src/store/cartStore.ts` - Shopping cart logic
-- `src/services/api.ts` - API configuration and endpoints
-- `tailwind.config.js` - Tailwind theme customization
-- `vite.config.ts` - Vite configuration
-
-## Common Tasks
-
-### Add New Page
-1. Create component in `src/pages/`
-2. Add route in `src/App.tsx`: `<Route path="/path" element={<Page />} />`
-3. Add navigation link in Header/Footer if needed
-
-### Add to Cart Store
-1. Add new state/action to `cartStore.ts`
-2. Export from interface
-3. Use in components: `const action = useCartStore(state => state.action)`
-
-### Fetch New API Data
-1. Add service function to `services/api.ts`
-2. Use in component with React Query:
-```tsx
-const { data, isLoading } = useQuery({
-  queryKey: ['key'],
-  queryFn: serviceFunction,
-});
-```
-
-### Style New Component
-- Use Tailwind utility classes
-- Reference existing components for patterns
-- Use `className` prop for custom styles
-- Maintain mobile-first responsive design
-
-## Gotchas & Best Practices
-
-- **TypeScript Imports**: MUST use `import type` for type-only imports due to `verbatimModuleSyntax` setting. Regular imports will cause TS1484 errors.
-- **Cart Persistence**: Cart state auto-saves to localStorage (key: `cart-storage`)
-- **React Query**: Default refetchOnWindowFocus is disabled in config
-- **Toaster**: Already configured in main.tsx, just use `toast.success()` or `toast.error()`
-- **Image Loading**: Product images from API may load slowly; use loading states
-- **TypeScript Types**: If adding new types, define in `types/index.ts` and export
-- **Routing**: Use `Link` from react-router-dom, not `<a>` tags for internal navigation
-- **Price Display**: API returns USD, can convert to VND with `formatPrice()` (rate: 1 USD = 23,000 VND)
-- **Tailwind Version**: Project uses Tailwind CSS 3.4.1 (not v4) for stability
-
+| Đường dẫn | Mục đích |
+|---|---|
+| `src/services/api.ts` | Toàn bộ đối tượng service API + Axios instance + interceptor |
+| `src/services/authApi.ts` | API xác thực (đăng nhập/đăng ký/đăng xuất) |
+| `src/store/` | Zustand store (auth, cart) với persist localStorage |
+| `src/types/index.ts` | Toàn bộ interface TypeScript — một file barrel duy nhất |
+| `src/utils/helpers.ts` | Định dạng giá, cắt ngắn văn bản, hàm trợ giúp danh mục |
+| `src/components/admin/` | Layout quản trị + route guard |
+| `src/components/product/` | Component hiển thị sản phẩm (card, grid, bộ lọc) |
+| `src/pages/admin/` | Các trang quản trị (tổng quan, đơn hàng, quản lý sản phẩm) |
+| `src/pages/` | Các trang công khai |
