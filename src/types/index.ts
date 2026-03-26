@@ -363,3 +363,37 @@ export interface CreateReviewRequest {
   ratingValue: number;
   comment?: string;
 }
+
+// ============= CHATBOT TYPES =============
+
+export interface ChatMessageRequest {
+  message: string;
+  sessionId: string | null;
+  productId?: number | null;
+}
+
+export interface ChatProductSuggestion {
+  id: number;
+  name: string;
+  price: number;
+  thumbnailUrl: string;
+  slug: string;
+  brand: string;
+  material: string;
+  categoryName: string;
+}
+
+export interface ChatMessageResponse {
+  message: string;
+  sessionId: string;
+  suggestions: ChatProductSuggestion[];
+  timestamp: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+  suggestions?: ChatProductSuggestion[];
+}

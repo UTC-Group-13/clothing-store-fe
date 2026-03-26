@@ -15,7 +15,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "http://160.30.113.40:8080",
       "description": "Generated server url"
     }
   ],
@@ -28,6 +28,10 @@
     {
       "name": "User Address",
       "description": "API quản lý địa chỉ giao hàng của user"
+    },
+    {
+      "name": "Chat AI",
+      "description": "API chatbot AI gợi ý sản phẩm — không cần đăng nhập để sử dụng"
     },
     {
       "name": "Sample Data",
@@ -2290,6 +2294,62 @@
         ]
       }
     },
+    "/api/chat/message": {
+      "post": {
+        "tags": [
+          "Chat AI"
+        ],
+        "summary": "Gửi tin nhắn cho AI Shopping Assistant",
+        "description": "Gửi tin nhắn và nhận phản hồi từ AI kèm danh sách sản phẩm gợi ý.\n\n**Không cần đăng nhập** — tuy nhiên nếu đã đăng nhập, AI sẽ được cá nhân hóa hơn.\n\n**Cách dùng:**\n- Lần đầu: không cần gửi `sessionId`\n- Các lần sau: gửi `sessionId` từ response trước để AI nhớ ngữ cảnh\n- Session tự động hết hạn sau 2 giờ không hoạt động\n\n**Ví dụ tin nhắn:**\n- \"Tôi muốn mua áo thun màu đỏ dưới 300k\"\n- \"Áo này có phối với quần jeans không?\"\n- \"Tôi cao 1m70 nặng 65kg mặc size gì?\"\n- \"Cho tôi xem áo khoác mùa đông\"\n",
+        "operationId": "chat",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              },
+              "examples": {
+                "Tìm sản phẩm theo ngân sách": {
+                  "description": "Tìm sản phẩm theo ngân sách",
+                  "value": {
+                    "message": "Tôi muốn mua áo thun cotton dưới 300k, có màu đỏ không?",
+                    "sessionId": null
+                  }
+                },
+                "Hỏi về size": {
+                  "description": "Hỏi về size",
+                  "value": {
+                    "message": "Tôi cao 1m70, nặng 65kg thì mặc size M hay L?",
+                    "sessionId": "550e8400-e29b-41d4-a716-446655440000"
+                  }
+                },
+                "Hỏi về sản phẩm đang xem": {
+                  "description": "Hỏi về sản phẩm đang xem",
+                  "value": {
+                    "message": "Áo này có phối được với quần jeans xanh không?",
+                    "sessionId": "550e8400-e29b-41d4-a716-446655440000",
+                    "productId": 5
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseChatResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/categories": {
       "get": {
         "tags": [
@@ -3709,6 +3769,44 @@
           }
         ]
       }
+    },
+    "/api/chat/session/{sessionId}": {
+      "delete": {
+        "tags": [
+          "Chat AI"
+        ],
+        "summary": "Xóa lịch sử chat",
+        "description": "Xóa toàn bộ lịch sử hội thoại của session. Dùng khi muốn bắt đầu lại từ đầu.",
+        "operationId": "clearSession",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "description": "Session ID cần xóa",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -4964,6 +5062,127 @@
           "timestamp": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "ChatRequest": {
+        "type": "object",
+        "description": "Yêu cầu chat với AI Shopping Assistant",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Tin nhắn của người dùng",
+            "example": "Tôi muốn mua áo thun màu đỏ dưới 300k",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Session ID để duy trì ngữ cảnh hội thoại (null = tạo phiên mới)",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID sản phẩm đang xem (tuỳ chọn, giúp AI hiểu ngữ cảnh)",
+            "example": 5
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ApiResponseChatResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ChatResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ChatResponse": {
+        "type": "object",
+        "description": "Phản hồi từ chatbot AI",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Nội dung phản hồi của AI"
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Session ID để gửi cho request tiếp theo (giữ ngữ cảnh hội thoại)",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "suggestions": {
+            "type": "array",
+            "description": "Danh sách sản phẩm được AI gợi ý (tối đa 5 sản phẩm)",
+            "items": {
+              "$ref": "#/components/schemas/ProductSuggestionDTO"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductSuggestionDTO": {
+        "type": "object",
+        "description": "Sản phẩm được AI gợi ý",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID sản phẩm",
+            "example": 5
+          },
+          "name": {
+            "type": "string",
+            "description": "Tên sản phẩm",
+            "example": "Áo Thun Basic Cotton"
+          },
+          "price": {
+            "type": "number",
+            "description": "Giá sản phẩm",
+            "example": 250000
+          },
+          "thumbnailUrl": {
+            "type": "string",
+            "description": "Ảnh đại diện",
+            "example": "/uploads/images/ao-thun.jpg"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug sản phẩm (dùng để tạo link)",
+            "example": "ao-thun-basic-cotton"
+          },
+          "brand": {
+            "type": "string",
+            "description": "Thương hiệu",
+            "example": "Uniqlo"
+          },
+          "material": {
+            "type": "string",
+            "description": "Chất liệu",
+            "example": "Cotton 100%"
+          },
+          "categoryName": {
+            "type": "string",
+            "description": "Tên danh mục",
+            "example": "Áo Thun"
           }
         }
       },

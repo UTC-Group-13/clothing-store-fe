@@ -18,6 +18,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminProducts from './pages/admin/AdminProducts';
+import ChatBot from "./components/chat/ChatBot.tsx";
 
 function App() {
   return (
@@ -58,6 +59,8 @@ function App() {
                 </Routes>
               </main>
               <Footer />
+              {/* AI ChatBot */}
+              <ChatBot />
             </div>
           }
         />

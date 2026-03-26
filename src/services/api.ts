@@ -7,7 +7,8 @@ import type {
   OrderDetail, OrderRequest, OrderStatus,
   AddressDTO, AddressRequest,
   AdminPagedResponse, UpdateOrderStatusRequest, ProductRequest,
-  ReviewResponse, ReviewSummary, CreateReviewRequest
+  ReviewResponse, ReviewSummary, CreateReviewRequest,
+  ChatMessageRequest, ChatMessageResponse
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://160.30.113.40:8080/api';
@@ -301,6 +302,18 @@ export const reviewService = {
 
   delete: async (reviewId: number): Promise<void> => {
     await api.delete(`/reviews/${reviewId}`);
+  },
+};
+
+// ============= CHATBOT API =============
+export const chatService = {
+  sendMessage: async (data: ChatMessageRequest): Promise<ChatMessageResponse> => {
+    const response = await api.post<ApiResponse<ChatMessageResponse>>('/chat/message', data);
+    return response.data.data;
+  },
+
+  deleteSession: async (sessionId: string): Promise<void> => {
+    await api.delete(`/chat/session/${sessionId}`);
   },
 };
 
