@@ -8,7 +8,8 @@ import type {
   AddressDTO, AddressRequest,
   AdminPagedResponse, UpdateOrderStatusRequest, ProductRequest,
   ReviewResponse, ReviewSummary, CreateReviewRequest,
-  ChatMessageRequest, ChatMessageResponse
+  ChatMessageRequest, ChatMessageResponse,
+  ProductFullRequest, ProductDetailResponse, FileUploadResponse
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://160.30.113.40:8080/api';
@@ -314,6 +315,53 @@ export const chatService = {
 
   deleteSession: async (sessionId: string): Promise<void> => {
     await api.delete(`/chat/session/${sessionId}`);
+  },
+};
+
+// ============= ADMIN PRODUCT FULL MANAGEMENT API =============
+export const adminProductFullService = {
+  createFull: async (data: ProductFullRequest): Promise<ProductDetailResponse> => {
+    const response = await api.post<ApiResponse<ProductDetailResponse>>('/products/full', data);
+    return response.data.data;
+  },
+
+  updateFull: async (id: number, data: ProductFullRequest): Promise<ProductDetailResponse> => {
+    const response = await api.put<ApiResponse<ProductDetailResponse>>(`/products/full/${id}`, data);
+    return response.data.data;
+  },
+
+  getFullById: async (id: number): Promise<ProductDetailResponse> => {
+    const response = await api.get<ApiResponse<ProductDetailResponse>>(`/products/full/${id}`);
+    return response.data.data;
+  },
+
+  deleteVariant: async (variantId: number): Promise<void> => {
+    await api.delete(`/product-variants/${variantId}`);
+  },
+
+  deleteStock: async (stockId: number): Promise<void> => {
+    await api.delete(`/variant-stocks/${stockId}`);
+  },
+};
+
+// ============= FILE UPLOAD API =============
+export const fileUploadService = {
+  uploadImage: async (file: File): Promise<FileUploadResponse> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post<ApiResponse<FileUploadResponse>>('/files/image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data.data;
+  },
+
+  uploadImages: async (files: File[]): Promise<FileUploadResponse[]> => {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file));
+    const response = await api.post<ApiResponse<FileUploadResponse[]>>('/files/images', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data.data;
   },
 };
 

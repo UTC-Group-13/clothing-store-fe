@@ -18,6 +18,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminProducts from './pages/admin/AdminProducts';
+import AdminProductForm from './pages/admin/AdminProductForm';
 import ChatBot from "./components/chat/ChatBot.tsx";
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="orders/:id" element={<AdminOrderDetail />} />
+          <Route path="products/create" element={<AdminProductForm />} />
+          <Route path="products/:id/edit" element={<AdminProductForm />} />
           <Route path="products" element={<AdminProducts />} />
         </Route>
 

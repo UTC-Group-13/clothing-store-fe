@@ -55,7 +55,7 @@ Toàn bộ kiểu TypeScript dùng chung nằm trong `src/types/index.ts`. Các 
 ## Các lệnh
 
 ```bash
-npm run dev      # Chạy server phát triển tại http://localhost:5173
+npm run dev      # Chạy server phát triển tại http://160.30.113.40:5173
 npm run build    # tsc -b && vite build (kiểm tra kiểu dữ liệu rồi đóng gói)
 npm run lint     # ESLint (cấu hình flat, bao gồm TS + React hooks + React Refresh)
 npm run preview  # Xem trước bản build production

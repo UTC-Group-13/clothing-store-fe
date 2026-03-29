@@ -5,7 +5,7 @@ import { formatPrice } from '../../utils/helpers';
 import { Link } from 'react-router-dom';
 import {
   Loader2, Boxes, Trash2, Search,
-  Eye, EyeOff, ExternalLink
+  Eye, EyeOff, ExternalLink, Plus, Pencil
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { Product } from '../../types';
@@ -62,6 +62,13 @@ const AdminProducts = () => {
           </h1>
           <p className="text-sm text-gray-500 mt-1">Tổng cộng {products.length} sản phẩm</p>
         </div>
+        <Link
+          to="/admin/products/create"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium text-sm"
+        >
+          <Plus className="w-4 h-4" />
+          Thêm sản phẩm
+        </Link>
       </div>
 
       {/* Search */}
@@ -140,6 +147,13 @@ const AdminProducts = () => {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-center gap-1">
+                        <Link
+                          to={`/admin/products/${product.id}/edit`}
+                          className="p-1.5 text-gray-400 hover:text-primary-600 transition rounded"
+                          title="Sửa"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Link>
                         <Link
                           to={`/product/${product.id}`}
                           target="_blank"

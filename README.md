@@ -41,7 +41,7 @@ npm install
 npm run dev
 ```
 
-Ứng dụng sẽ chạy tại: **http://localhost:5173**
+Ứng dụng sẽ chạy tại: **http://160.30.113.40:5173**
 
 ## 🛠️ Commands
 

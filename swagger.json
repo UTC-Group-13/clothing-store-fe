@@ -34,6 +34,10 @@
       "description": "API chatbot AI gợi ý sản phẩm — không cần đăng nhập để sử dụng"
     },
     {
+      "name": "Product Management",
+      "description": "API tao/cap nhat san pham day du (kem bien the + ton kho)"
+    },
+    {
       "name": "Sample Data",
       "description": "API tạo dữ liệu mẫu cho testing"
     },
@@ -638,6 +642,92 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseVoid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/products/full/{id}": {
+      "get": {
+        "tags": [
+          "Product Management"
+        ],
+        "summary": "Lay chi tiet day du san pham",
+        "description": "Tra ve toan bo thong tin san pham kem danh sach bien the mau sac va ton kho theo size.\nEndpoint nay public (khong can dang nhap).\n",
+        "operationId": "getFullById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID san pham",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductDetailResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Product Management"
+        ],
+        "summary": "Cap nhat san pham day du [ADMIN]",
+        "description": "Cap nhat san pham + bien the + ton kho.\n\n**Quy tac xu ly variants / stocks:**\n- Neu `id` co gia tri → cap nhat ban ghi da ton tai\n- Neu `id = null`     → tao moi\n- Ban ghi khong co trong request → **giu nguyen** (khong bi xoa)\n\n**De xoa bien the / stock**, dung endpoint rieng:\n- `DELETE /api/product-variants/{variantId}`\n- `DELETE /api/variant-stocks/{stockId}`\n\nYeu cau quyen **ADMIN**\n",
+        "operationId": "updateFull",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID san pham can cap nhat",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductFullRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductDetailResponse"
                 }
               }
             }
@@ -1819,6 +1909,43 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseProductDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/products/full": {
+      "post": {
+        "tags": [
+          "Product Management"
+        ],
+        "summary": "Tao san pham day du [ADMIN]",
+        "description": "Tao moi san pham kem bien the mau sac va ton kho theo size trong 1 request duy nhat.\n\n**Quy trinh:**\n1. Khai bao thong tin Product (name, slug, basePrice, categoryId...)\n2. Them danh sach `variants` - moi variant tuong ung 1 mau sac\n3. Moi variant co danh sach `stocks` - moi stock tuong ung 1 size (kem so luong + SKU)\n\n**Luu y:**\n- Chi duoc co 1 variant co `isDefault = true`\n- `slug` phai duy nhat trong he thong\n- `sku` trong moi stock phai duy nhat toan cuc\n- Yeu cau quyen **ADMIN**\n",
+        "operationId": "createFull",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductFullRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductDetailResponse"
                 }
               }
             }
@@ -4166,6 +4293,338 @@
           "timestamp": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "ProductFullRequest": {
+        "type": "object",
+        "description": "Request tao/cap nhat san pham day du (kem bien the va ton kho)",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Ten san pham",
+            "example": "Ao Thun Basic Cotton",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug URL-friendly (khong dau, cach boi '-')",
+            "example": "ao-thun-basic-cotton",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "description": "Mo ta san pham",
+            "example": "Ao thun cotton 100%, thoang mat"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID danh muc san pham",
+            "example": 1
+          },
+          "basePrice": {
+            "type": "number",
+            "description": "Gia goc san pham (VND)",
+            "example": 199000,
+            "minimum": 0
+          },
+          "brand": {
+            "type": "string",
+            "description": "Thuong hieu",
+            "example": "Nike",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "material": {
+            "type": "string",
+            "description": "Chat lieu",
+            "example": "Cotton 100%",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Trang thai hoat dong (mac dinh: true)",
+            "example": true
+          },
+          "variants": {
+            "type": "array",
+            "description": "Danh sach bien the theo mau sac",
+            "items": {
+              "$ref": "#/components/schemas/VariantRequest"
+            }
+          }
+        },
+        "required": [
+          "basePrice",
+          "categoryId",
+          "name",
+          "slug"
+        ]
+      },
+      "StockRequest": {
+        "type": "object",
+        "description": "Ton kho theo size",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID ton kho (null = tao moi, co gia tri = cap nhat)",
+            "example": null
+          },
+          "sizeId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID size",
+            "example": 2
+          },
+          "stockQty": {
+            "type": "integer",
+            "format": "int32",
+            "description": "So luong ton kho",
+            "example": 50,
+            "minimum": 0
+          },
+          "priceOverride": {
+            "type": "number",
+            "description": "Gia rieng cho variant nay (null = dung base_price)",
+            "example": null,
+            "minimum": 0
+          },
+          "sku": {
+            "type": "string",
+            "description": "Ma hang duy nhat",
+            "example": "ATB-DO-S",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "sizeId",
+          "sku"
+        ]
+      },
+      "VariantRequest": {
+        "type": "object",
+        "description": "Bien the theo mau sac",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID bien the (null = tao moi, co gia tri = cap nhat)",
+            "example": null
+          },
+          "colorId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID mau sac",
+            "example": 3
+          },
+          "colorImageUrl": {
+            "type": "string",
+            "description": "URL anh thumbnail cho mau nay",
+            "example": "/uploads/images/ao-do.jpg"
+          },
+          "images": {
+            "type": "string",
+            "description": "Danh sach URL anh chi tiet (JSON array string)",
+            "example": [
+              "/uploads/images/img1.jpg",
+              "/uploads/images/img2.jpg"
+            ]
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Bien the mac dinh hien thi khi vao trang san pham",
+            "example": true
+          },
+          "stocks": {
+            "type": "array",
+            "description": "Danh sach ton kho theo size",
+            "items": {
+              "$ref": "#/components/schemas/StockRequest"
+            }
+          }
+        },
+        "required": [
+          "colorId"
+        ]
+      },
+      "ApiResponseProductDetailResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProductDetailResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductDetailResponse": {
+        "type": "object",
+        "description": "Chi tiet day du san pham kem bien the va ton kho",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID san pham"
+          },
+          "name": {
+            "type": "string",
+            "description": "Ten san pham"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug"
+          },
+          "description": {
+            "type": "string",
+            "description": "Mo ta san pham"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID danh muc"
+          },
+          "categoryName": {
+            "type": "string",
+            "description": "Ten danh muc"
+          },
+          "basePrice": {
+            "type": "number",
+            "description": "Gia goc (VND)"
+          },
+          "brand": {
+            "type": "string",
+            "description": "Thuong hieu"
+          },
+          "material": {
+            "type": "string",
+            "description": "Chat lieu"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Trang thai hoat dong"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Ngay tao (yyyy-MM-dd HH:mm:ss)"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Ngay cap nhat (yyyy-MM-dd HH:mm:ss)"
+          },
+          "variants": {
+            "type": "array",
+            "description": "Danh sach bien the theo mau sac",
+            "items": {
+              "$ref": "#/components/schemas/VariantDetail"
+            }
+          }
+        }
+      },
+      "StockDetail": {
+        "type": "object",
+        "description": "Chi tiet ton kho theo size",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID ton kho"
+          },
+          "sizeId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID size"
+          },
+          "sizeLabel": {
+            "type": "string",
+            "description": "Nhan size",
+            "example": "M"
+          },
+          "sizeType": {
+            "type": "string",
+            "description": "Loai size",
+            "example": "clothing"
+          },
+          "stockQty": {
+            "type": "integer",
+            "format": "int32",
+            "description": "So luong ton kho"
+          },
+          "priceOverride": {
+            "type": "number",
+            "description": "Gia rieng (null = dung base_price)"
+          },
+          "effectivePrice": {
+            "type": "number",
+            "description": "Gia thuc te ap dung (priceOverride neu co, nguoc lai la basePrice)"
+          },
+          "sku": {
+            "type": "string",
+            "description": "Ma SKU"
+          }
+        }
+      },
+      "VariantDetail": {
+        "type": "object",
+        "description": "Chi tiet bien the theo mau sac",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID bien the"
+          },
+          "colorId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "ID mau sac"
+          },
+          "colorName": {
+            "type": "string",
+            "description": "Ten mau sac"
+          },
+          "colorHexCode": {
+            "type": "string",
+            "description": "Ma hex mau sac",
+            "example": "#FF0000"
+          },
+          "colorSlug": {
+            "type": "string",
+            "description": "Slug mau sac"
+          },
+          "colorImageUrl": {
+            "type": "string",
+            "description": "URL anh thumbnail cho mau nay"
+          },
+          "images": {
+            "type": "string",
+            "description": "Danh sach URL anh chi tiet (JSON array string)"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Bien the mac dinh?"
+          },
+          "stocks": {
+            "type": "array",
+            "description": "Danh sach ton kho theo size",
+            "items": {
+              "$ref": "#/components/schemas/StockDetail"
+            }
           }
         }
       },

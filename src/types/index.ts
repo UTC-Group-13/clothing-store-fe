@@ -397,3 +397,86 @@ export interface ChatMessage {
   timestamp: Date;
   suggestions?: ChatProductSuggestion[];
 }
+
+// ============= PRODUCT MANAGEMENT (ADMIN FULL) TYPES =============
+
+// --- Request types ---
+
+export interface StockRequest {
+  id: number | null;
+  sizeId: number;
+  stockQty: number;
+  priceOverride: number | null;
+  sku: string;
+}
+
+export interface VariantRequest {
+  id: number | null;
+  colorId: number;
+  colorImageUrl: string | null;
+  images: string | null; // JSON array string
+  isDefault: boolean;
+  stocks: StockRequest[];
+}
+
+export interface ProductFullRequest {
+  name: string;
+  slug: string;
+  description: string;
+  categoryId: number;
+  basePrice: number;
+  brand: string;
+  material: string;
+  isActive: boolean;
+  variants: VariantRequest[];
+}
+
+// --- Response types ---
+
+export interface StockDetail {
+  id: number;
+  sizeId: number;
+  sizeLabel: string;
+  sizeType: string;
+  stockQty: number;
+  priceOverride: number | null;
+  effectivePrice: number;
+  sku: string;
+}
+
+export interface VariantDetail {
+  id: number;
+  colorId: number;
+  colorName: string;
+  colorHexCode: string;
+  colorSlug: string;
+  colorImageUrl: string | null;
+  images: string | null; // JSON array string
+  isDefault: boolean;
+  stocks: StockDetail[];
+}
+
+export interface ProductDetailResponse {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  categoryId: number;
+  categoryName: string;
+  basePrice: number;
+  brand: string;
+  material: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  variants: VariantDetail[];
+}
+
+// --- File Upload ---
+
+export interface FileUploadResponse {
+  fileName: string;
+  fileUrl: string;
+  contentType: string;
+  size: number;
+}
