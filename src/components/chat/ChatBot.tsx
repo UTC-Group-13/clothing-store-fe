@@ -131,8 +131,8 @@ const ChatBot = () => {
     localStorage.removeItem('chat-session');
   };
 
-  const handleProductClick = (product: ChatProductSuggestion) => {
-    // Navigate to product and close chat
+  const handleProductClick = (_product: ChatProductSuggestion) => {
+    // Navigation is handled by Link component, just close chat
     setIsOpen(false);
   };
 
