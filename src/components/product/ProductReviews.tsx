@@ -68,7 +68,7 @@ const RatingBar = ({ star, count, total }: { star: number; count: number; total:
   );
 };
 
-// ========== Single Review Card (SHOP.CO style) ==========
+// ========== Single Review Card (Clothing Store style) ==========
 const ReviewCard = ({
   review,
   currentUserId,

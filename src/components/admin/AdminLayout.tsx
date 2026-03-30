@@ -38,7 +38,7 @@ const AdminLayout = () => {
         <div className="p-5 border-b border-gray-700">
           <Link to="/admin" className="flex items-center gap-2 text-lg font-bold">
             <Settings className="w-6 h-6 text-primary-400" />
-            <span>SHOP.CO Admin</span>
+            <span>Clothing Store Admin</span>
           </Link>
         </div>
 

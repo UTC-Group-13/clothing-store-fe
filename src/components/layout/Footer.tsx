@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">SHOP.CO</h3>
+            <h3 className="text-lg font-bold mb-4">Clothing Store</h3>
             <p className="text-gray-400">
               Thời trang hiện đại cho phong cách mỗi ngày.
             </p>
@@ -49,7 +49,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2026 SHOP.CO. All rights reserved.</p>
+          <p>&copy; 2026 Clothing Store. All rights reserved.</p>
         </div>
       </div>
     </footer>
