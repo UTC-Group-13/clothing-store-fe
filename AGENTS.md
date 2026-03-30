@@ -1,4 +1,4 @@
-# AGENTS.md — ShopVN Ecommerce Frontend
+# AGENTS.md — Clothing Store Ecommerce Frontend
 
 ## Kiến trúc
 

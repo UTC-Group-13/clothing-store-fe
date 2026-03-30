@@ -208,7 +208,7 @@ const ChatBot = () => {
                   Xin chào! 👋
                 </h4>
                 <p className="text-gray-500 text-sm mb-4">
-                  Tôi là trợ lý AI của ShopVN. Hãy hỏi tôi về sản phẩm, tư vấn
+                  Tôi là trợ lý AI của Clothing Store. Hãy hỏi tôi về sản phẩm, tư vấn
                   size, hoặc gợi ý phối đồ!
                 </p>
                 <div className="flex flex-wrap justify-center gap-2">

@@ -1,4 +1,4 @@
-# 🛍️ ShopVN - Ecommerce Frontend
+# 🛍️ Clothing Store - Ecommerce Frontend
 
 Ứng dụng ecommerce thời trang Việt Nam được xây dựng bằng **React 19**, **TypeScript**, **Vite**, và **Tailwind CSS**. Kết nối backend Clothing Store API tại `http://160.30.113.40:8080/api`.
 
@@ -187,7 +187,7 @@ MIT License
 
 ## 👨‍💻 Tác giả
 
-Được xây dựng với ❤️ bởi ShopVN Team
+Được xây dựng với ❤️ bởi Clothing Store Team
 
 ---
 
