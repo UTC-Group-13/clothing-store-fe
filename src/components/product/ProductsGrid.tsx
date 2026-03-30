@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { productService } from '../../services/api';
 import type { ProductSearchParams } from '../../types';
+import { getImageUrl } from '../../utils/helpers';
 
 interface ProductsGridProps {
   searchParams: ProductSearchParams;
@@ -113,7 +114,7 @@ const ProductsGrid = memo(({
                     >
                       <div className="relative aspect-square overflow-hidden bg-[#F0EEED]">
                         <img
-                          src={product.thumbnailUrl || product.image || 'https://via.placeholder.com/400x400?text=No+Image'}
+                          src={getImageUrl(product.thumbnailUrl || product.image)}
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"

@@ -7,6 +7,7 @@ import { useAuthStore } from '../store/authStore';
 import ProductReviews from '../components/product/ProductReviews';
 import ProductCard from '../components/product/ProductCard';
 import toast from 'react-hot-toast';
+import { getImageUrl } from '../utils/helpers';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -271,7 +272,7 @@ const ProductDetailPage = () => {
             {/* Main Image */}
             <div className="bg-white rounded-2xl p-8 aspect-square flex items-center justify-center">
               <img
-                src={productImages[selectedImageIndex]}
+                src={getImageUrl(productImages[selectedImageIndex])}
                 alt={product.name}
                 className="max-w-full max-h-full object-contain"
               />
@@ -291,7 +292,7 @@ const ProductDetailPage = () => {
                     }`}
                   >
                     <img
-                      src={image}
+                      src={getImageUrl(image)}
                       alt={`${product.name} ${index + 1}`}
                       className="max-w-full max-h-full object-contain"
                     />

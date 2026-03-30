@@ -69,3 +69,13 @@ export const generateSlug = (name: string): string => {
     .replace(/\s+/g, '-');
 };
 
+/**
+ * Chuẩn hóa URL ảnh sản phẩm: nếu là đường dẫn tương đối thì thêm domain backend.
+ * Dùng cho mọi nơi hiển thị ảnh sản phẩm (Cart, Checkout, Product, Admin...)
+ */
+export const getImageUrl = (url: string | null | undefined): string => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://160.30.113.40:8080';
+  if (!url) return '/placeholder-product.jpg';
+  if (url.startsWith('http')) return url;
+  return `${API_BASE_URL}${url}`;
+};
