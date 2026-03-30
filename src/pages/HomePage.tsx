@@ -5,6 +5,7 @@ import { useMemo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import heroImage from '../assets/hero.png';
+import { getImageUrl } from '../utils/helpers';
 import type { ProductSearchParams } from '../types';
 
 const BRAND_NAMES = ['VERSACE', 'ZARA', 'GUCCI', 'PRADA', 'Calvin Klein'];
@@ -104,7 +105,7 @@ const HomePage = () => {
   // Lấy sản phẩm từ API response
   const newArrivals = newArrivalsPage?.content || [];
   const topSelling = cheapestPage?.content || [];
-  
+
   const styleProducts = useMemo(() => (products || []).slice(0, 4), [products]);
 
   // Handle category selection
@@ -214,7 +215,7 @@ const HomePage = () => {
                 <p className="text-2xl font-bold text-gray-900">{style}</p>
                 {styleProducts[index] ? (
                   <img
-                    src={styleProducts[index].image}
+                    src={getImageUrl(styleProducts[index].image)}
                     alt={style}
                     className="h-full object-contain"
                   />

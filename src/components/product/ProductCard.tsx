@@ -1,6 +1,6 @@
 import type { Product } from '../../types';
 import { ShoppingCart, Star } from 'lucide-react';
-import { formatPrice, truncateText } from '../../utils/helpers';
+import { formatPrice, truncateText, getImageUrl } from '../../utils/helpers';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
@@ -13,7 +13,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const discountRate = ((product.id % 3) + 2) * 10;
   const originalPrice = price / (1 - discountRate / 100);
   const displayName = product.name || product.title || 'Sản phẩm';
-  const displayImage = product.thumbnailUrl || product.image || 'https://via.placeholder.com/400x400?text=No+Image';
+  const displayImage = getImageUrl(product.thumbnailUrl || product.image);
 
   const handleSelectOptions = (e: React.MouseEvent) => {
     e.preventDefault();
