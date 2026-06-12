@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { productService, adminProductService } from '../../services/api';
-import { formatPrice } from '../../utils/helpers';
+import { formatPrice, getImageUrl, handleImageError } from '../../utils/helpers';
 import { Link } from 'react-router-dom';
 import {
   Loader2, Boxes, Trash2, Search,
@@ -10,13 +10,6 @@ import {
 import toast from 'react-hot-toast';
 import type { Product } from '../../types';
 
-const API_BASE_URL = 'http://160.30.113.40:8080';
-
-const getImageUrl = (url: string | null | undefined) => {
-  if (!url) return 'https://via.placeholder.com/60x60?text=No+Image';
-  if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
-};
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
@@ -118,6 +111,7 @@ const AdminProducts = () => {
                           src={getImageUrl(product.thumbnailUrl)}
                           alt={product.name}
                           className="w-12 h-12 object-cover rounded bg-gray-100 shrink-0"
+                          onError={handleImageError}
                         />
                         <div className="min-w-0">
                           <p className="font-medium text-gray-900 truncate max-w-[250px]">{product.name}</p>

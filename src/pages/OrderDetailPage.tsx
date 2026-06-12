@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { orderService, reviewService } from '../services/api';
 import { useAuthStore } from '../store/authStore';
-import { formatPrice } from '../utils/helpers';
+import { formatPrice, getImageUrl, handleImageError } from '../utils/helpers';
 import WriteReviewModal from '../components/product/WriteReviewModal';
 import {
   ArrowLeft, Package, Truck, CreditCard, MapPin,
@@ -12,13 +12,6 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const API_BASE_URL = 'http://160.30.113.40:8080';
-
-const getImageUrl = (url: string | null | undefined) => {
-  if (!url) return 'https://via.placeholder.com/80x80?text=No+Image';
-  if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
-};
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: any }> = {
   PENDING: { label: 'Chờ xác nhận', color: 'text-yellow-700', bg: 'bg-yellow-100', icon: Clock },
@@ -363,6 +356,7 @@ const OrderDetailPage = () => {
                         src={getImageUrl(item.colorImageUrl)}
                         alt={item.productName}
                         className="w-20 h-20 object-cover rounded bg-white"
+                        onError={handleImageError}
                       />
                     </Link>
                     <div className="flex-1 min-w-0">

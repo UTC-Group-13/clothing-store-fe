@@ -5,7 +5,7 @@ import {
   productService, colorService, sizeService,
   adminProductFullService, fileUploadService
 } from '../../services/api';
-import { formatPrice, generateSlug } from '../../utils/helpers';
+import { formatPrice, generateSlug, getImageUrl, handleImageError } from '../../utils/helpers';
 import type {
   ProductFullRequest, VariantRequest, StockRequest,
   ProductDetailResponse, Category, Color, Size
@@ -16,13 +16,6 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://160.30.113.40:8080';
-
-const getImageUrl = (url: string | null | undefined) => {
-  if (!url) return '';
-  if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
-};
 
 // Local form state types (more flexible than request types)
 interface StockFormState {
@@ -679,6 +672,7 @@ const AdminProductForm = () => {
                           src={getImageUrl(variant.colorImageUrl)}
                           alt="Color thumbnail"
                           className="w-20 h-20 object-cover rounded-lg border"
+                          onError={handleImageError}
                         />
                         <button
                           type="button"
@@ -722,6 +716,7 @@ const AdminProductForm = () => {
                           src={getImageUrl(url)}
                           alt={`Gallery ${imgIdx + 1}`}
                           className="w-20 h-20 object-cover rounded-lg border"
+                          onError={handleImageError}
                         />
                         <button
                           type="button"

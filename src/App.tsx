@@ -20,10 +20,12 @@ import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminProductForm from './pages/admin/AdminProductForm';
 import ChatBot from "./components/chat/ChatBot.tsx";
+import ScrollToTop from "./components/layout/ScrollToTop.tsx";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Admin Routes - separate layout, no Header/Footer */}
         <Route

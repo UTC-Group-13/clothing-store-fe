@@ -2,16 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Trash2, Bot, User, Loader2, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { chatService } from '../../services/api';
-import { formatPrice } from '../../utils/helpers';
+import { formatPrice, getImageUrl, handleImageError } from '../../utils/helpers';
 import type { ChatMessage, ChatProductSuggestion } from '../../types';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://160.30.113.40:8080';
-
-const getImageUrl = (url: string | null | undefined): string => {
-  if (!url) return '/placeholder-product.jpg';
-  if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
-};
 
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -285,9 +277,7 @@ const ChatBot = () => {
                                     src={getImageUrl(product.thumbnailUrl)}
                                     alt={product.name}
                                     className="w-16 h-16 object-cover rounded-md"
-                                    onError={(e) => {
-                                      (e.target as HTMLImageElement).src = '/placeholder-product.jpg';
-                                    }}
+                                    onError={handleImageError}
                                   />
                                   <div className="flex-1 min-w-0">
                                     <Link

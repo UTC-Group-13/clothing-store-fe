@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminOrderService, orderStatusService } from '../../services/api';
-import { formatPrice } from '../../utils/helpers';
+import { formatPrice, getImageUrl, handleImageError } from '../../utils/helpers';
 import {
   ArrowLeft, Loader2, Package, Truck, CreditCard, MapPin,
   Clock, RotateCcw, CheckCircle2, XCircle, Building2,
@@ -9,13 +9,6 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const API_BASE_URL = 'http://160.30.113.40:8080';
-
-const getImageUrl = (url: string | null | undefined) => {
-  if (!url) return 'https://via.placeholder.com/80x80?text=No+Image';
-  if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
-};
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: any }> = {
   PENDING: { label: 'Chờ xác nhận', color: 'text-yellow-700', bg: 'bg-yellow-100', icon: Clock },
@@ -246,6 +239,7 @@ const AdminOrderDetail = () => {
                     src={getImageUrl(item.colorImageUrl)}
                     alt={item.productName}
                     className="w-16 h-16 object-cover rounded bg-white shrink-0"
+                    onError={handleImageError}
                   />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm truncate">{item.productName}</p>

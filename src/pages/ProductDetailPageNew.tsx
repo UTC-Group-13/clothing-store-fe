@@ -7,7 +7,7 @@ import { useAuthStore } from '../store/authStore';
 import ProductReviews from '../components/product/ProductReviews';
 import ProductCard from '../components/product/ProductCard';
 import toast from 'react-hot-toast';
-import { getImageUrl } from '../utils/helpers';
+import { getImageUrl, handleImageError } from '../utils/helpers';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -275,6 +275,7 @@ const ProductDetailPage = () => {
                 src={getImageUrl(productImages[selectedImageIndex])}
                 alt={product.name}
                 className="max-w-full max-h-full object-contain"
+                onError={handleImageError}
               />
             </div>
 
@@ -295,6 +296,7 @@ const ProductDetailPage = () => {
                       src={getImageUrl(image)}
                       alt={`${product.name} ${index + 1}`}
                       className="max-w-full max-h-full object-contain"
+                      onError={handleImageError}
                     />
                   </button>
                 ))}

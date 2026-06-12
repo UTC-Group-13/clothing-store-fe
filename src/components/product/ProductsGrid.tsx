@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { productService } from '../../services/api';
 import type { ProductSearchParams } from '../../types';
-import { getImageUrl } from '../../utils/helpers';
+import { getImageUrl, handleImageError } from '../../utils/helpers';
 
 interface ProductsGridProps {
   searchParams: ProductSearchParams;
@@ -118,6 +118,7 @@ const ProductsGrid = memo(({
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
+                          onError={handleImageError}
                         />
                       </div>
 

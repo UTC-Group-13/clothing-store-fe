@@ -73,9 +73,34 @@ export const generateSlug = (name: string): string => {
  * Chuẩn hóa URL ảnh sản phẩm: nếu là đường dẫn tương đối thì thêm domain backend.
  * Dùng cho mọi nơi hiển thị ảnh sản phẩm (Cart, Checkout, Product, Admin...)
  */
+const LOCAL_BASE = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || '';
+const REMOTE_BASE = 'http://160.30.113.40:8080';
+
 export const getImageUrl = (url: string | null | undefined): string => {
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://160.30.113.40:8080';
-  if (!url) return '/placeholder-product.jpg';
+  if (!url) return '/placeholder-product.svg';
   if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
+  return `${LOCAL_BASE || REMOTE_BASE}${url}`;
+};
+
+/**
+ * Xử lý khi ảnh load lỗi: fallback sang server remote, rồi placeholder.
+ * Dùng cho onError của thẻ <img>.
+ */
+export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const img = e.target as HTMLImageElement;
+  const src = img.src;
+
+  // Nếu đang load từ local và lỗi → thử từ server remote
+  if (LOCAL_BASE && !src.startsWith(REMOTE_BASE) && !img.dataset.fallback) {
+    const path = src.replace(LOCAL_BASE, '');
+    img.dataset.fallback = '1';
+    img.src = `${REMOTE_BASE}${path}`;
+    return;
+  }
+
+  // Nếu remote cũng lỗi → placeholder
+  if (!img.dataset.placeholder) {
+    img.dataset.placeholder = '1';
+    img.src = '/placeholder-product.svg';
+  }
 };

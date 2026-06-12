@@ -6,7 +6,7 @@ import {
   shopBankAccountService, orderService, addressService
 } from '../services/api';
 import { useAuthStore } from '../store/authStore';
-import { formatPrice } from '../utils/helpers';
+import { formatPrice, getImageUrl, handleImageError } from '../utils/helpers';
 import type { AddressDTO } from '../types';
 import {
   ArrowLeft, Truck, CreditCard, MapPin, Loader2,
@@ -15,13 +15,6 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const API_BASE_URL = 'http://160.30.113.40:8080';
-
-const getImageUrl = (url: string | null | undefined) => {
-  if (!url) return 'https://via.placeholder.com/60x60?text=No+Image';
-  if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
-};
 
 const formatAddress = (addr: AddressDTO) => {
   const parts: string[] = [];
@@ -606,6 +599,7 @@ const CheckoutPage = () => {
                       src={getImageUrl(item.colorImageUrl)}
                       alt={item.productName}
                       className="w-14 h-14 object-cover rounded bg-gray-100 shrink-0"
+                      onError={handleImageError}
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-800 truncate">{item.productName}</p>

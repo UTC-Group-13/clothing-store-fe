@@ -1,6 +1,6 @@
 import type { Product } from '../../types';
 import { ShoppingCart, Star } from 'lucide-react';
-import { formatPrice, truncateText, getImageUrl } from '../../utils/helpers';
+import { formatPrice, truncateText, getImageUrl, handleImageError } from '../../utils/helpers';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
@@ -10,8 +10,6 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
   const price = product.basePrice || product.price || 0;
-  const discountRate = ((product.id % 3) + 2) * 10;
-  const originalPrice = price / (1 - discountRate / 100);
   const displayName = product.name || product.title || 'Sản phẩm';
   const displayImage = getImageUrl(product.thumbnailUrl || product.image);
 
@@ -36,6 +34,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           alt={displayName}
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
+          onError={handleImageError}
         />
       </div>
 
@@ -55,12 +54,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg font-bold text-gray-900">
             {formatPrice(price)}
-          </span>
-          <span className="text-sm text-gray-400 line-through">
-            {formatPrice(originalPrice)}
-          </span>
-          <span className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded-full">
-            -{discountRate}%
           </span>
         </div>
 

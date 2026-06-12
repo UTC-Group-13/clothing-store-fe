@@ -2,18 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { cartService } from '../services/api';
 import { useAuthStore } from '../store/authStore';
-import { formatPrice } from '../utils/helpers';
+import { formatPrice, getImageUrl, handleImageError } from '../utils/helpers';
 import { ShoppingBag, Minus, Plus, Trash2, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { CartItemDetail } from '../types';
 
-const API_BASE_URL = 'http://160.30.113.40:8080';
-
-const getImageUrl = (url: string | null | undefined) => {
-  if (!url) return 'https://via.placeholder.com/100x100?text=No+Image';
-  if (url.startsWith('http')) return url;
-  return `${API_BASE_URL}${url}`;
-};
 
 // Cart Item Component
 const CartItemRow = ({ item, onUpdate, onRemove, isUpdating }: {
@@ -29,6 +22,7 @@ const CartItemRow = ({ item, onUpdate, onRemove, isUpdating }: {
           src={getImageUrl(item.colorImageUrl)}
           alt={item.productName}
           className="w-24 h-24 object-cover bg-gray-100 rounded"
+          onError={handleImageError}
         />
       </Link>
 

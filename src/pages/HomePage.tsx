@@ -5,7 +5,7 @@ import { useMemo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import heroImage from '../assets/hero.png';
-import { getImageUrl } from '../utils/helpers';
+import { getImageUrl, handleImageError } from '../utils/helpers';
 import type { ProductSearchParams } from '../types';
 
 const BRAND_NAMES = ['VERSACE', 'ZARA', 'GUCCI', 'PRADA', 'Calvin Klein'];
@@ -218,6 +218,7 @@ const HomePage = () => {
                     src={getImageUrl(styleProducts[index].image)}
                     alt={style}
                     className="h-full object-contain"
+                    onError={handleImageError}
                   />
                 ) : null}
               </div>
